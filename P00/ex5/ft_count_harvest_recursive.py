@@ -10,4 +10,5 @@ def ft_count_harvest_recursive(remain: int = -1, max: int = 0):
         print(f"Day {max-remain}")
         ft_count_harvest_recursive(remain-1, max)
 
+
 # ft_count_harvest_recursive()

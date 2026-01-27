@@ -6,4 +6,5 @@ def ft_garden_summary():
     print(f"Plants: {nbpl}")
     print("Growing well!!")
 
+
 # ft_garden_summary()

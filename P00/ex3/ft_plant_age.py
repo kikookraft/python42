@@ -5,3 +5,6 @@ def ft_plant_age():
         print("no no no dont pull it")
     else:
         print("Plant is readyyyy")
+
+
+# ft_plant_age()

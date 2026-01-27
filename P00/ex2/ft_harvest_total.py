@@ -4,3 +4,6 @@ def ft_harvest_total():
     for i in [1, 2, 3]:
         total += int(input(f"Day {i} harvest: "))
     print(f"Total harvest: {total}")
+
+
+# ft_harvest_total()

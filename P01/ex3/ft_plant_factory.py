@@ -1,5 +1,5 @@
-names = ["Juan", "Jean-Eude", "Marwalou", "S̸̱͍̖͙̏È̷̡̧͚̅G̷͌͆̀̕", "𝓻𝓸𝓼𝓮", "🗿🗿"]
-height = [42, 1.78, 0.45, 12, 1.95, 275]
+names: list[str] = ["Juan", "Jean-Eude", "Marwalou", "S̸̱͍̖͙̏È", "𝓻𝓸𝓼𝓮", "🗿🗿"]
+height: list[float] = [42, 1.78, 0.45, 12, 1.95, 275]
 
 
 class Plant():
@@ -51,25 +51,25 @@ class Plant():
         """
         self.alive = False
 
-    def get_info(self) -> tuple:
+    def get_info(self) -> tuple[float, int, str, bool]:
         """get info
 
         Returns:
             tuple: info
         """
-        return (self.heigh, self.age, self.name, self.alive)
+        return (self.heigh, self.aging, self.name, self.alive)
 
-    def get_name(self):
+    def get_name(self) -> str:
         """Return name
         """
         return self.name
 
-    def get_height(self):
+    def get_height(self) -> float:
         """Return height
         """
         return self.heigh
 
-    def get_age(self):
+    def get_age(self) -> int:
         """Return age
         """
         return self.aging
@@ -81,21 +81,6 @@ class Plant():
             bool: true if plant alive
         """
         return self.alive
-
-
-def ft_any(iterable) -> bool:
-    """Custom any function
-
-    Args:
-        iterable: An iterable to check
-
-    Returns:
-        bool: True if any element is truthy
-    """
-    for element in iterable:
-        if element:
-            return True
-    return False
 
 
 if __name__ == "__main__":

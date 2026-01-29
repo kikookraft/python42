@@ -1,5 +1,5 @@
-names = ["Juan", "Jean-Eude", "Marwalou", "S̸̱͍̖͙̏È̷̡̧͚̅G̷͌͆̀̕", "𝓻𝓸𝓼𝓮", "🗿🗿"]
-height = [9999999999999999, 1.78, 0.45, 12, 1.95, 275]
+names: list[str] = ["Juan", "Jean-Eude", "Marwalou", "S̸̱͍̖͙̏E", "𝓻𝓸𝓼𝓮", "🗿🗿"]
+height: list[float] = [9999999999999999, 1.78, 0.45, 12, 1.95, 275]
 
 
 class Plant():

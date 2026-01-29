@@ -126,11 +126,11 @@ class SecurePlant():
 
 
 if __name__ == "__main__":
-    plants: list[SecurePlant] = [SecurePlant() for _ in range(5)]
 
-    for plant in plants:
-        plant.set_name("Fern")
-        plant.set_height(10.0)
-        plant.set_age(5)
-        plant.set_die_age(100)
+    for i in range(5):
+        plant = SecurePlant()
+        plant.set_name(f"Plant_{i}")
+        plant.set_height(10.0 * (i + 1))
+        plant.set_age(i * 10 if i % 2 == 0 else -i * 10)
+        plant.set_die_age(90 - i * 10)
         print(plant)

@@ -1,4 +1,4 @@
-names = ["Juan", "Jean-Eude", "Marwalou", "S̸̱͍̖͙̏È̷̡̧͚̅G̷͌͆̀̕", "𝓻𝓸𝓼𝓮", "🗿🗿"]
+names = ["Juan", "Jean-Eude", "Marwalou", "S̸̱͍̖͙̏È̷̡̧͚̅G̷͌͆̀̕", "𝓻𝓸𝓼𝓮", "🗿🗿"]
 height = [42, 1.78, 0.45, 12, 1.95, 275]
 
 
@@ -83,12 +83,27 @@ class Plant():
         return self.alive
 
 
+def ft_any(iterable) -> bool:
+    """Custom any function
+
+    Args:
+        iterable: An iterable to check
+
+    Returns:
+        bool: True if any element is truthy
+    """
+    for element in iterable:
+        if element:
+            return True
+    return False
+
+
 if __name__ == "__main__":
     plants = [Plant(i) for i in range(5)]
     day = 0
     prev_s = [plant.get_height() for plant in plants]
 
-    while any(plant.is_alive() for plant in plants):
+    while ft_any(plant.is_alive() for plant in plants):
         if day % 7 == 0:
             print(f"--- Day {day} ---")
         for plant in plants:
@@ -96,10 +111,11 @@ if __name__ == "__main__":
                 plant.age()
                 if day % 7 == 0:
                     print(plant.get_name(), ": \
-", round(plant.get_height(), 2), "cm, \
+", plant.get_height(), "cm, \
 ", plant.get_age(), "days old.")
                     grow = plant.get_height() - prev_s[plants.index(plant)]
-                    print("  Grown +", round(grow, 2), "cm since last week.")
+                    print("  Grown +", grow, "\
+cm since last week.")
                 prev_s[plants.index(plant)] = plant.get_height()
             else:
                 if day % 7 == 0:

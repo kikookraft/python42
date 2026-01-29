@@ -1,5 +1,5 @@
-names = ["Juan", "Jean-Eude", "Marwalou", "S̸̱͍̖͙̏È̷̡̧͚̅G̷͌͆̀̕", "𝓻𝓸𝓼𝓮", "🗿🗿"]
-height = [42, 1.78, 0.45, 12, 1.95, 275]
+names: list[str] = ["Juan", "Jean-Eude", "Marwalou", "S̸̱͍̖͙̏È", "𝓻𝓸𝓼𝓮", "🗿🗿"]
+height: list[float] = [42, 1.78, 0.45, 12, 1.95, 275]
 
 
 class Plant():
@@ -51,25 +51,25 @@ class Plant():
         """
         self.alive = False
 
-    def get_info(self) -> tuple:
+    def get_info(self) -> tuple[float, int, str, bool]:
         """get info
 
         Returns:
             tuple: info
         """
-        return (self.heigh, self.age, self.name, self.alive)
+        return (self.heigh, self.aging, self.name, self.alive)
 
-    def get_name(self):
+    def get_name(self) -> str:
         """Return name
         """
         return self.name
 
-    def get_height(self):
+    def get_height(self) -> float:
         """Return height
         """
         return self.heigh
 
-    def get_age(self):
+    def get_age(self) -> int:
         """Return age
         """
         return self.aging
@@ -83,7 +83,7 @@ class Plant():
         return self.alive
 
 
-def ft_any(iterable) -> bool:
+def check_alive(it: list[Plant]) -> bool:
     """Custom any function
 
     Args:
@@ -92,18 +92,18 @@ def ft_any(iterable) -> bool:
     Returns:
         bool: True if any element is truthy
     """
-    for element in iterable:
-        if element:
+    for element in it:
+        if element.is_alive():
             return True
     return False
 
 
 if __name__ == "__main__":
-    plants = [Plant(i) for i in range(5)]
+    plants: list[Plant] = [Plant(i) for i in range(5)]
     day = 0
-    prev_s = [plant.get_height() for plant in plants]
+    prev_s: list[float] = [plant.get_height() for plant in plants]
 
-    while ft_any(plant.is_alive() for plant in plants):
+    while check_alive(plants):
         if day % 7 == 0:
             print(f"--- Day {day} ---")
         for plant in plants:

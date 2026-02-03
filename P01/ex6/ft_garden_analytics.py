@@ -332,14 +332,31 @@ class Garden:
         """
         return f"=== {self.__name} ===\n{[p for p in self.__plants]}"
 
-    def add_plants(self, p: Plant | Vegetable |
-                   Tree | FloweringPlant | PrizeFlower) -> None:
+    def add_plants(self, p: list[Plant | Vegetable |
+                   Tree | FloweringPlant | PrizeFlower]) -> None:
         """Add a plants to the garden"""
-        self.__plants.append(p)
+        self.__plants.extend(p)
+
+    @classmethod
+    def add_plant(cls,
+                  garden: 'Garden',
+                  p: Plant | Vegetable |
+                  Tree | FloweringPlant | PrizeFlower) -> None:
+        """Add a plant to the garden"""
+        garden.__plants.append(p)
 
     def get_name(self) -> str:
         """get the name"""
         return self.__name
+
+    def get_plants(self) -> list[Plant | Vegetable |
+                                  Tree | FloweringPlant | PrizeFlower]:
+        """Get the list of plants
+        
+        Returns:
+            list: the plants in the garden
+        """
+        return self.__plants
 
 
 class GardenManager:
@@ -390,3 +407,53 @@ class GardenManager:
         """String representation of the object
         """
         return f"=== Garden Network ===\n{[g for g in self.__gardens]}"
+
+    def get_gardens(self) -> list[Garden]:
+        """Get the list of gardens
+
+        Returns:
+            list[Garden]: the gardens
+        """
+        return self.__gardens
+
+    class GardenStats:
+        def __init__(self) -> None:
+            """pass"""
+
+        @staticmethod
+        def mean(nb: list[int | float]) -> float:
+            moy: float = 0
+            for i in nb:
+                moy += i
+            return (moy / len(nb))
+
+        @classmethod
+        def garden_analytics(cls,
+                             manager: 'GardenManager'
+                             ) -> dict[str, float]:
+            """Compute garden analytics
+
+            Args:
+                manager (GardenManager): the garden manager"""
+            total_plants: int = 0
+            total_alive: int = 0
+            ages: list[float] = []
+            heights: list[float] = []
+
+            g: Garden
+            for g in manager.get_gardens():
+                p: Plant | Vegetable | Tree | FloweringPlant | PrizeFlower
+                for p in g.get_plants():
+                    total_plants += 1
+                    if p.is_alive():
+                        total_alive += 1
+                    ages.append(p.get_age())
+                    heights.append(p.get_height())
+
+            analytics: dict[str, float] = {
+                "total_plants": total_plants,
+                "total_alive": total_alive,
+                "mean_age": cls.mean(ages) if ages else 0,
+                "mean_height": cls.mean(heights) if heights else 0
+            }
+            return analytics

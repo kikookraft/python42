@@ -1,6 +1,6 @@
 
 class Plant():
-    def __init__(self) -> None:
+    def __init__(self, seed: int = 1) -> None:
         """
         Init the object
         Args:
@@ -11,7 +11,7 @@ class Plant():
         self.__heigh: float = 0.0
         self.__aging: int = 0
         self.__grow_ratio: float = .0042
-        self.__die_age: int = 90
+        self.__die_age: int = int((seed % 10 + 4.2) * 10 + 0.5 * (seed / 10))
         self.__alive = True
 
     def __repr__(self) -> str:
@@ -135,12 +135,12 @@ class Plant():
             self.__die_age = die_age
 
 
-class Flower(Plant):
-    def __init__(self) -> None:
+class FloweringPlant(Plant):
+    def __init__(self, seed: int = 2, name: str = "Flower") -> None:
         """Init the object
         """
-        super().__init__()
-        self.set_name("Flower")
+        super().__init__(seed=seed)
+        self.set_name(name)
         self.set_height(10.0)
         self.set_die_age(30)
         self.__color: str = "Red"
@@ -148,6 +148,7 @@ class Flower(Plant):
         self.__bloom_time: int = 5  # days to bloom
 
     def __repr__(self) -> str:
+        """String representation"""
         return super().__repr__() + \
             f"\n Color: {self.__color} \n Bloomed: {self.__bloomed}"
 
@@ -168,17 +169,25 @@ class Flower(Plant):
             self.bloom()
 
 
+class PrizeFlower(FloweringPlant):
+    def __init__(self, seed: int = 8, name: str = "Flower") -> None:
+        """Init class"""
+        super().__init__(seed, name)
+        self.__prize = seed % 3 * 9 / seed * (10/len(name))
+
+
 class Tree(Plant):
-    def __init__(self) -> None:
+    def __init__(self, seed: int = 3) -> None:
         """Init the object
         """
-        super().__init__()
+        super().__init__(seed)
         self.set_name("Tree")
         self.set_height(100.0)
         self.set_die_age(3650)  # 10 years
         self.__trunk_diameter: float = 1.0  # in cm
 
     def __repr__(self) -> str:
+        """String representation"""
         return super().__repr__() + \
             f"\n Trunk Diameter: {self.__trunk_diameter} cm"
 
@@ -210,10 +219,10 @@ class Tree(Plant):
 
 
 class Vegetable(Plant):
-    def __init__(self) -> None:
+    def __init__(self, seed: int = 4) -> None:
         """Init the object
         """
-        super().__init__()
+        super().__init__(seed)
         self.set_name("Vegetable")
         self.set_height(5.0)
         self.set_die_age(60)
@@ -222,6 +231,7 @@ class Vegetable(Plant):
         self.__harvested: bool = False
 
     def __repr__(self) -> str:
+        """String representation"""
         return super().__repr__() + \
             f"\n Nutritional Value: {self.__nutritional_value} \n \
 Harvested: {self.__harvested}"
@@ -278,6 +288,52 @@ nutritional value {self.__nutritional_value}.")
             self.__harvest_season = season
         else:
             print("Harvest season must be positive")
+
+
+class Garden:
+    def __init__(
+            self,
+            plants: list[Plant] = [],
+            name: str = "Garden"
+            ) -> None:
+        """Init the function"""
+        self.__plants: list[Plant] = plants
+        self.__name: str = name
+
+    def set_name(self, name: str) -> None:
+        """Set name of the garden
+
+        Args:
+            name (name): the name of the garden
+        """
+        if name != "":
+            self.__name = name
+
+    def age(self) -> None:
+        """Make the plant age
+        """
+        p: Plant
+        for p in self.__plants:
+            if p.is_alive():
+                p.age()
+            else:
+                print(p.get_name() + " has died 🥀🥀")
+                self.__plants.remove(p)
+
+    def __repr__(self) -> str:
+        """String representation of the object
+        """
+        return f"=== {self.__name} ===\n{[p for p in self.__plants]}"
+
+    def add_plants(self, p: Plant) -> None:
+        """Add a plants to the garden"""
+        self.__plants.append(p)
+
+    def get_name(self) -> str:
+        """get the name"""
+        return self.__name
+
+
 
 
 # TODO ex6

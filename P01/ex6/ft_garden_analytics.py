@@ -175,6 +175,11 @@ class PrizeFlower(FloweringPlant):
         super().__init__(seed, name)
         self.__prize = seed % 3 * 9 / seed * (10/len(name))
 
+    def __repr__(self) -> str:
+        """String representation"""
+        return super().__repr__() + \
+            f"\nPrize: {self.__prize}"
+
 
 class Tree(Plant):
     def __init__(self, seed: int = 3) -> None:
@@ -293,11 +298,13 @@ nutritional value {self.__nutritional_value}.")
 class Garden:
     def __init__(
             self,
-            plants: list[Plant] = [],
+            plants: list[Plant | Vegetable |
+                         Tree | FloweringPlant | PrizeFlower] = [],
             name: str = "Garden"
             ) -> None:
         """Init the function"""
-        self.__plants: list[Plant] = plants
+        self.__plants: list[Plant | Vegetable |
+                            Tree | FloweringPlant | PrizeFlower] = plants
         self.__name: str = name
 
     def set_name(self, name: str) -> None:
@@ -325,7 +332,8 @@ class Garden:
         """
         return f"=== {self.__name} ===\n{[p for p in self.__plants]}"
 
-    def add_plants(self, p: Plant) -> None:
+    def add_plants(self, p: Plant | Vegetable |
+                   Tree | FloweringPlant | PrizeFlower) -> None:
         """Add a plants to the garden"""
         self.__plants.append(p)
 
@@ -334,6 +342,51 @@ class Garden:
         return self.__name
 
 
+class GardenManager:
+    def __init__(self) -> None:
+        """Init"""
+        self.__gardens: list[Garden] = []
 
+    def age(self):
+        """make the plant age
+        """
+        g: Garden
+        for g in self.__gardens:
+            g.age()
 
-# TODO ex6
+    def create_garden_network(self) -> None:
+        for i in range(6):
+            p: Plant | Vegetable | Tree | FloweringPlant | PrizeFlower
+            for j in range(12):
+                seed = i * 10 + j
+                if j % 4 == 0:
+                    p = Tree(seed)
+                elif j % 4 == 1:
+                    p = FloweringPlant(seed, f"Flower{seed}")
+                elif j % 4 == 2:
+                    p = PrizeFlower(seed, f"PrizeFlower{seed}")
+                else:
+                    p = Vegetable(seed)
+                if j == 0:
+                    garden = Garden([p], f"Garden{i}")
+                    self.__gardens.append(garden)
+                    print(
+                        f"Adding {p.get_name()} to garden {garden.get_name()}")
+                else:
+                    self.__gardens[i].add_plants(p)
+
+    def run(self, verbose: bool = False) -> None:
+        """run the time and age plants
+        """
+        if self.__gardens == []:
+            return
+        for i in range(150):
+            for g in self.__gardens:
+                g.age()
+                if verbose:
+                    print(f">> Day {i}\n{g}")
+
+    def __repr__(self) -> str:
+        """String representation of the object
+        """
+        return f"=== Garden Network ===\n{[g for g in self.__gardens]}"

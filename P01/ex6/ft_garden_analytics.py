@@ -1,12 +1,7 @@
 
 class Plant():
+    """Base Plant class"""
     def __init__(self, seed: int = 1) -> None:
-        """
-        Init the object
-        Args:
-            seed (int, optional): the seed for the random number generation.
-              Defaults to 0.
-        """
         self.__name: str = ""
         self.__heigh: float = 0.0
         self.__aging: int = 0
@@ -15,11 +10,6 @@ class Plant():
         self.__alive = True
 
     def __repr__(self) -> str:
-        """
-        Represent the object as a string
-        Returns:
-            str: _object_
-        """
         if self.__alive:
             return (f"\n===============================\n \
     Hello my name is {self.__name} \n \
@@ -53,44 +43,24 @@ class Plant():
         self.__alive = False
 
     def get_info(self) -> tuple[float, int, str, bool]:
-        """get info
-
-        Returns:
-            tuple: info
-        """
         return (self.__heigh, self.__aging, self.__name, self.__alive)
 
     def get_name(self) -> str:
-        """Return name
-        """
         return self.__name
 
     def get_height(self) -> float:
-        """Return height
-        """
         return self.__heigh
 
     def get_age(self) -> int:
-        """Return age
-        """
         return self.__aging
 
     def get_die_age(self) -> int:
-        """Return die age
-        """
         return self.__die_age
 
     def is_alive(self) -> bool:
-        """return if the plant is alive
-
-        Returns:
-            bool: true if plant alive
-        """
         return self.__alive
 
     def get_grow_ratio(self) -> float:
-        """Return grow ratio
-        """
         return self.__grow_ratio
 
     #######################
@@ -98,52 +68,31 @@ class Plant():
     #######################
 
     def set_height(self, height: float) -> None:
-        """Set height
-
-        Args:
-            height (float): height
-        """
         if height >= 0:
             self.__heigh = height
         else:
             print("Height must be positive")
 
     def set_age(self, age: int) -> None:
-        """Set age
-
-        Args:
-            age (int): age
-        """
         if age >= 0:
             self.__aging = age
         else:
             print("Age must be positive")
 
     def set_name(self, name: str) -> None:
-        """Set name
-
-        Args:
-            name (str): name
-        """
         if len(name) > 0:
             self.__name = name
         else:
             print("Name must be non empty")
 
     def set_die_age(self, die_age: int) -> None:
-        """Set die age
-
-        Args:
-            die_age (int): die age
-        """
         if die_age > 0:
             self.__die_age = die_age
 
 
 class FloweringPlant(Plant):
+    """Plant that can flower"""
     def __init__(self, seed: int = 2, name: str = "Flower") -> None:
-        """Init the object
-        """
         super().__init__(seed=seed)
         self.set_name(name)
         self.set_height(10.0)
@@ -153,7 +102,6 @@ class FloweringPlant(Plant):
         self.__bloom_time: int = 5  # days to bloom
 
     def __repr__(self) -> str:
-        """String representation"""
         return super().__repr__() + \
             f"Color: {self.__color} \nBloomed: {self.__bloomed}\n"
 
@@ -175,21 +123,22 @@ class FloweringPlant(Plant):
 
 
 class PrizeFlower(FloweringPlant):
+    """Flower that has a prize value"""
     def __init__(self, seed: int = 8, name: str = "Flower") -> None:
-        """Init class"""
         super().__init__(seed, name)
         self.__prize = seed % 3 * 9 / seed * (10/len(name))
 
     def __repr__(self) -> str:
-        """String representation"""
         return super().__repr__() + \
             f"Prize: {self.__prize}\n"
 
+    def get_prize(self) -> float:
+        return self.__prize
+
 
 class Tree(Plant):
+    """Tree class that extends Plant"""
     def __init__(self, seed: int = 3) -> None:
-        """Init the object
-        """
         super().__init__(seed)
         self.set_name("Tree")
         self.set_height(100.0)
@@ -197,26 +146,19 @@ class Tree(Plant):
         self.__trunk_diameter: float = 1.0  # in cm
 
     def __repr__(self) -> str:
-        """String representation"""
         return super().__repr__() + \
             f"Trunk Diameter: {self.__trunk_diameter} cm\n"
 
     def get_trunk_diameter(self) -> float:
-        """Return trunk diameter
-        """
         return self.__trunk_diameter
 
     def _Plant__grow(self) -> None:
-        """Make the tree grow if alive
-        """
         if not self.get_age() > self.get_die_age():
             self.set_height(self.get_height()
                             + self.get_height() * 2 * self.get_grow_ratio())
             self.__trunk_diameter += 0.1  # grows 0.1 cm per aging
 
     def produce_shade(self) -> None:
-        """Produce shade
-        """
         if self.is_alive():
             # print(f"The {self.get_name()} is producing shade.")
             pass
@@ -231,8 +173,6 @@ class Tree(Plant):
 
 class Vegetable(Plant):
     def __init__(self, seed: int = 4) -> None:
-        """Init the object
-        """
         super().__init__(seed)
         self.set_name("Vegetable")
         self.set_height(5.0)
@@ -242,7 +182,6 @@ class Vegetable(Plant):
         self.__harvested: bool = False
 
     def __repr__(self) -> str:
-        """String representation"""
         return super().__repr__() + \
             f"Nutritional Value: {self.__nutritional_value} \n\
 Harvested: {self.__harvested}\n"
@@ -264,37 +203,21 @@ nutritional value {self.__nutritional_value}.")
             self.harvest()
 
     def get_nutritional_value(self) -> float:
-        """Return nutritional value
-        """
         return self.__nutritional_value
 
     def get_harvest_season(self) -> int:
-        """Return harvest season
-        """
         return self.__harvest_season
 
     def is_harvested(self) -> bool:
-        """Return if harvested
-        """
         return self.__harvested
 
     def set_nutritional_value(self, value: float) -> None:
-        """Set nutritional value
-
-        Args:
-            value (float): nutritional value
-        """
         if value >= 0:
             self.__nutritional_value = value
         else:
             print("Nutritional value must be positive")
 
     def set_harvest_season(self, season: int) -> None:
-        """Set harvest season
-
-        Args:
-            season (int): harvest season
-        """
         if season > 0:
             self.__harvest_season = season
         else:
@@ -302,23 +225,18 @@ nutritional value {self.__nutritional_value}.")
 
 
 class Garden:
+    """Garden class that contains plants"""
     def __init__(
             self,
             plants: list[Plant | Vegetable |
                          Tree | FloweringPlant | PrizeFlower] = [],
             name: str = "Garden"
             ) -> None:
-        """Init the function"""
         self.__plants: list[Plant | Vegetable |
                             Tree | FloweringPlant | PrizeFlower] = plants
         self.__name: str = name
 
     def set_name(self, name: str) -> None:
-        """Set name of the garden
-
-        Args:
-            name (name): the name of the garden
-        """
         if name != "":
             self.__name = name
 
@@ -333,8 +251,6 @@ class Garden:
                 print(p.get_name() + " has died 🥀🥀")
 
     def __repr__(self) -> str:
-        """String representation of the object
-        """
         return f"=== {self.__name} ===\n{[p for p in self.__plants]}\n"
 
     def add_plants(self, p: list[Plant | Vegetable |
@@ -351,7 +267,6 @@ class Garden:
         garden.__plants.append(p)
 
     def get_name(self) -> str:
-        """get the name"""
         return self.__name
 
     def get_plants(self) -> list[Plant | Vegetable |
@@ -365,8 +280,8 @@ class Garden:
 
 
 class GardenManager:
+    """Garden Manager class that manages multiple gardens"""
     def __init__(self) -> None:
-        """Init"""
         self.__gardens: list[Garden] = []
 
     def age(self):
@@ -377,6 +292,8 @@ class GardenManager:
             g.age()
 
     def create_garden_network(self) -> None:
+        """Create a network of gardens with plants
+        """
         for i in range(6):
             p: Plant | Vegetable | Tree | FloweringPlant | PrizeFlower
             for j in range(12):
@@ -410,24 +327,16 @@ class GardenManager:
                     print(f"{g}")
 
     def __repr__(self) -> str:
-        """String representation of the object
-        """
         return f"=== Garden Network ===\n{[g for g in self.__gardens]}"
 
     def get_gardens(self) -> list[Garden]:
-        """Get the list of gardens
-
-        Returns:
-            list[Garden]: the gardens
-        """
         return self.__gardens
 
     class GardenStats:
-        def __init__(self) -> None:
-            """pass"""
-
+        """Class to compute garden statistics"""
         @staticmethod
         def mean(nb: list[int | float]) -> float:
+            """Compute the mean of a list of numbers"""
             moy: float = 0
             for i in nb:
                 moy += i

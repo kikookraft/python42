@@ -1,5 +1,7 @@
 
 class SecurePlant():
+    """Plants class but with setter and getter that garantee data integrity
+    """
     def __init__(self) -> None:
         """
         Init the object
@@ -130,7 +132,7 @@ if __name__ == "__main__":
     for i in range(5):
         plant = SecurePlant()
         plant.set_name(f"Plant_{i}")
-        plant.set_height(10.0 * (i + 1))
+        plant.set_height(i * 10 if i % 2 == 0 else -i * 10)
         plant.set_age(i * 10 if i % 2 == 0 else -i * 10)
         plant.set_die_age(90 - i * 10)
         print(plant)

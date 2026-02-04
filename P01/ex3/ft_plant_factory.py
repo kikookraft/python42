@@ -3,6 +3,8 @@ height: list[float] = [42, 1.78, 0.45, 12, 1.95, 275]
 
 
 class Plant():
+    """Plants class
+    """
     def __init__(self, seed: int = 0) -> None:
         """
         Init the object
@@ -84,7 +86,7 @@ class Plant():
 
 
 if __name__ == "__main__":
-    plants = [Plant(i) for i in range(5)]
+    plants: list[Plant] = [Plant(i) for i in range(5)]
 
     for plant in plants:
         print(plant)

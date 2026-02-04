@@ -1,12 +1,7 @@
 
 class Plant():
+    """Base Plants class"""
     def __init__(self) -> None:
-        """
-        Init the object
-        Args:
-            seed (int, optional): the seed for the random number generation.
-              Defaults to 0.
-        """
         self.__name: str = ""
         self.__heigh: float = 0.0
         self.__aging: int = 0
@@ -15,11 +10,6 @@ class Plant():
         self.__alive = True
 
     def __repr__(self) -> str:
-        """
-        Represent the object as a string
-        Returns:
-            str: _object_
-        """
         return (f"===============================\n \
     Hello my name is {self.__name} \n \
     My height is {self.__heigh} cm \n \
@@ -48,44 +38,24 @@ class Plant():
         self.__alive = False
 
     def get_info(self) -> tuple[float, int, str, bool]:
-        """get info
-
-        Returns:
-            tuple: info
-        """
         return (self.__heigh, self.__aging, self.__name, self.__alive)
 
     def get_name(self) -> str:
-        """Return name
-        """
         return self.__name
 
     def get_height(self) -> float:
-        """Return height
-        """
         return self.__heigh
 
     def get_age(self) -> int:
-        """Return age
-        """
         return self.__aging
 
     def get_die_age(self) -> int:
-        """Return die age
-        """
         return self.__die_age
 
     def is_alive(self) -> bool:
-        """return if the plant is alive
-
-        Returns:
-            bool: true if plant alive
-        """
         return self.__alive
 
     def get_grow_ratio(self) -> float:
-        """Return grow ratio
-        """
         return self.__grow_ratio
 
     #######################
@@ -93,52 +63,31 @@ class Plant():
     #######################
 
     def set_height(self, height: float) -> None:
-        """Set height
-
-        Args:
-            height (float): height
-        """
         if height >= 0:
             self.__heigh = height
         else:
             print("Height must be positive")
 
     def set_age(self, age: int) -> None:
-        """Set age
-
-        Args:
-            age (int): age
-        """
         if age >= 0:
             self.__aging = age
         else:
             print("Age must be positive")
 
     def set_name(self, name: str) -> None:
-        """Set name
-
-        Args:
-            name (str): name
-        """
         if len(name) > 0:
             self.__name = name
         else:
             print("Name must be non empty")
 
     def set_die_age(self, die_age: int) -> None:
-        """Set die age
-
-        Args:
-            die_age (int): die age
-        """
         if die_age > 0:
             self.__die_age = die_age
 
 
 class Flower(Plant):
+    """Flower class that extends Plant"""
     def __init__(self) -> None:
-        """Init the object
-        """
         super().__init__()
         self.set_name("Flower")
         self.set_height(10.0)
@@ -169,6 +118,7 @@ class Flower(Plant):
 
 
 class Tree(Plant):
+    """Tree class that extends Plant"""
     def __init__(self) -> None:
         """Init the object
         """
@@ -183,21 +133,15 @@ class Tree(Plant):
             f"\n Trunk Diameter: {self.__trunk_diameter} cm"
 
     def get_trunk_diameter(self) -> float:
-        """Return trunk diameter
-        """
         return self.__trunk_diameter
 
     def _Plant__grow(self) -> None:
-        """Make the tree grow if alive
-        """
         if not self.get_age() > self.get_die_age():
             self.set_height(self.get_height()
                             + self.get_height() * 2 * self.get_grow_ratio())
             self.__trunk_diameter += 0.1  # grows 0.1 cm per aging
 
     def produce_shade(self) -> None:
-        """Produce shade
-        """
         if self.is_alive():
             print(f"The {self.get_name()} is producing shade.")
 
@@ -210,9 +154,8 @@ class Tree(Plant):
 
 
 class Vegetable(Plant):
+    """Vegetable class that extends Plant"""
     def __init__(self) -> None:
-        """Init the object
-        """
         super().__init__()
         self.set_name("Vegetable")
         self.set_height(5.0)
@@ -243,37 +186,21 @@ nutritional value {self.__nutritional_value}.")
             self.harvest()
 
     def get_nutritional_value(self) -> float:
-        """Return nutritional value
-        """
         return self.__nutritional_value
 
     def get_harvest_season(self) -> int:
-        """Return harvest season
-        """
         return self.__harvest_season
 
     def is_harvested(self) -> bool:
-        """Return if harvested
-        """
         return self.__harvested
 
     def set_nutritional_value(self, value: float) -> None:
-        """Set nutritional value
-
-        Args:
-            value (float): nutritional value
-        """
         if value >= 0:
             self.__nutritional_value = value
         else:
             print("Nutritional value must be positive")
 
     def set_harvest_season(self, season: int) -> None:
-        """Set harvest season
-
-        Args:
-            season (int): harvest season
-        """
         if season > 0:
             self.__harvest_season = season
         else:

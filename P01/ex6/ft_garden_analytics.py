@@ -20,10 +20,15 @@ class Plant():
         Returns:
             str: _object_
         """
-        return (f"===============================\n \
+        if self.__alive:
+            return (f"\n===============================\n \
     Hello my name is {self.__name} \n \
     My height is {self.__heigh} cm \n \
-    I have {self.__aging} days")
+    I have {self.__aging} days\n")
+        else:
+            return (f"\n===============================\n \
+    {self.__name} is dead. \n \
+    It lived for {self.__aging} days \n")
 
     def __grow(self) -> None:
         """
@@ -150,7 +155,7 @@ class FloweringPlant(Plant):
     def __repr__(self) -> str:
         """String representation"""
         return super().__repr__() + \
-            f"\n Color: {self.__color} \n Bloomed: {self.__bloomed}"
+            f"Color: {self.__color} \nBloomed: {self.__bloomed}\n"
 
     def bloom(self) -> None:
         """Make the flower bloom
@@ -178,7 +183,7 @@ class PrizeFlower(FloweringPlant):
     def __repr__(self) -> str:
         """String representation"""
         return super().__repr__() + \
-            f"\nPrize: {self.__prize}"
+            f"Prize: {self.__prize}\n"
 
 
 class Tree(Plant):
@@ -194,7 +199,7 @@ class Tree(Plant):
     def __repr__(self) -> str:
         """String representation"""
         return super().__repr__() + \
-            f"\n Trunk Diameter: {self.__trunk_diameter} cm"
+            f"Trunk Diameter: {self.__trunk_diameter} cm\n"
 
     def get_trunk_diameter(self) -> float:
         """Return trunk diameter
@@ -213,7 +218,8 @@ class Tree(Plant):
         """Produce shade
         """
         if self.is_alive():
-            print(f"The {self.get_name()} is producing shade.")
+            # print(f"The {self.get_name()} is producing shade.")
+            pass
 
     def age(self) -> None:
         """Increase the age of the tree
@@ -238,8 +244,8 @@ class Vegetable(Plant):
     def __repr__(self) -> str:
         """String representation"""
         return super().__repr__() + \
-            f"\n Nutritional Value: {self.__nutritional_value} \n \
-Harvested: {self.__harvested}"
+            f"Nutritional Value: {self.__nutritional_value} \n\
+Harvested: {self.__harvested}\n"
 
     def harvest(self) -> None:
         """Harvest the vegetable
@@ -325,12 +331,11 @@ class Garden:
                 p.age()
             else:
                 print(p.get_name() + " has died 🥀🥀")
-                self.__plants.remove(p)
 
     def __repr__(self) -> str:
         """String representation of the object
         """
-        return f"=== {self.__name} ===\n{[p for p in self.__plants]}"
+        return f"=== {self.__name} ===\n{[p for p in self.__plants]}\n"
 
     def add_plants(self, p: list[Plant | Vegetable |
                    Tree | FloweringPlant | PrizeFlower]) -> None:
@@ -350,9 +355,9 @@ class Garden:
         return self.__name
 
     def get_plants(self) -> list[Plant | Vegetable |
-                                  Tree | FloweringPlant | PrizeFlower]:
+                                 Tree | FloweringPlant | PrizeFlower]:
         """Get the list of plants
-        
+
         Returns:
             list: the plants in the garden
         """
@@ -390,7 +395,7 @@ class GardenManager:
                     print(
                         f"Adding {p.get_name()} to garden {garden.get_name()}")
                 else:
-                    self.__gardens[i].add_plants(p)
+                    self.__gardens[i].add_plants([p])
 
     def run(self, verbose: bool = False) -> None:
         """run the time and age plants
@@ -398,10 +403,11 @@ class GardenManager:
         if self.__gardens == []:
             return
         for i in range(150):
+            print(f"--- Day {i} ---")
             for g in self.__gardens:
                 g.age()
                 if verbose:
-                    print(f">> Day {i}\n{g}")
+                    print(f"{g}")
 
     def __repr__(self) -> str:
         """String representation of the object
@@ -454,6 +460,20 @@ class GardenManager:
                 "total_plants": total_plants,
                 "total_alive": total_alive,
                 "mean_age": cls.mean(ages) if ages else 0,
-                "mean_height": cls.mean(heights) if heights else 0
+                "mean_height": cls.mean(heights) if heights else 0,
+                "total_gardens": len(manager.get_gardens())
             }
             return analytics
+
+
+if __name__ == "__main__":
+    manager = GardenManager()
+    manager.create_garden_network()
+    print(manager)
+    manager.run(verbose=False)
+    print(manager)
+
+    stats = GardenManager.GardenStats.garden_analytics(manager)
+    print("Garden Analytics:")
+    for key, value in stats.items():
+        print(f"{key}: {value}")

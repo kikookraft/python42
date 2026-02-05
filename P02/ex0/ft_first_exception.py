@@ -1,10 +1,10 @@
 
-def check_temperature(temp_str: str) -> float | None:
+def check_temperature(temp_str: str) -> int | None:
     """Function that check if the given temperture is valid
       and return it as a float.
     """
     try:
-        temp = float(temp_str)
+        temp = int(temp_str)
         if temp < 0:
             raise ValueError("Temperature cannot be below 0.C")
         if temp > 40:

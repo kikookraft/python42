@@ -48,3 +48,17 @@ if __name__ == "__main__":
         check_water_amount(150)
     except WaterError as e:
         print(f"Water error: {e.message}")
+
+    try:
+        check_plant("rose")
+        check_water_amount(50)
+        print("Plant and water amount are valid.")
+    except GardenError as e:
+        print(f"Garden error: {e.message}")
+
+    try:
+        check_plant("cactus")
+        check_water_amount(150)
+    except GardenError as e:
+        print(f"Garden error: {e.message}")
+    print("💀💀💀💀")

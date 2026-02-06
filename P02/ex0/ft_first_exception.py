@@ -25,6 +25,6 @@ if __name__ == "__main__":
             temp = check_temperature(temp_str)
             if temp is not None:
                 print(f"Valid temperature: {temp}°C")
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, EOFError):
             print("\nExiting the program.")
             break

@@ -23,6 +23,10 @@ class Plant:
                  ) -> None:
         if not name:
             raise PlantError("Plant name cannot be empty.")
+        if water_level < 0:
+            raise WaterError("Water level cannot be negative.")
+        if water_level > 10.0:
+            raise WaterError("Water level cannot exceed 10.0.")
         self.__name: str = name
         self.__last_watered: int = 0
         self.__water_level: float = water_level
@@ -130,12 +134,13 @@ class GardenManager:
 plants=[\n{tmp}])"
 
 
-if __name__ == "__main__":
+def test_garden_management() -> None:
     garden = GardenManager()
     plant1 = Plant("Rose", 3)
     plant2 = Plant("Tulip", 2)
     try:
         plant3 = Plant("", 1)
+        print(plant3)
     except PlantError as e:
         print(f"Error creating plant: {e}")
     garden.add_plant(plant1)
@@ -154,8 +159,14 @@ if __name__ == "__main__":
                 except WaterError as e:
                     print(f"Error watering plant: {e}")
                     plant.water(garden.get_current_day(), 1.0)
+                finally:
+                    print(f"Watered {plant.name()}.")
         if day < 9:
             try:
                 input(f"Press Enter to continue to the day {day + 1}...")
-            except EOFError:
-                pass
+            except (KeyboardInterrupt, EOFError):
+                break
+
+
+if __name__ == "__main__":
+    test_garden_management()

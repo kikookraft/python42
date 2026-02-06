@@ -66,9 +66,10 @@ class Plant:
         and decreasing the water level by 0.1.
         """
         self.__last_watered += 1
-        self.__water_level -= 0.3
-        if self.__water_level < 0:
+        if self.__water_level < 0.3:
             self.__water_level = 0.0
+        else:
+            self.__water_level -= 0.3
 
     def __repr__(self) -> str:
         return f"Plant(name={self.__name}, \
@@ -160,12 +161,15 @@ def test_garden_management() -> None:
                     print(f"Error watering plant: {e}")
                     plant.water(garden.get_current_day(), 1.0)
                 finally:
-                    print(f"Watered {plant.name()}.")
-        if day < 9:
+                    print(f"Watered {plant.name()} with "
+                          f"{plant.get_water_level()} liters of water.")
+        if day < 19:
             try:
                 input(f"Press Enter to continue to the day {day + 1}...")
             except (KeyboardInterrupt, EOFError):
                 break
+            finally:
+                print("Moving to the next day...\n")
 
 
 if __name__ == "__main__":

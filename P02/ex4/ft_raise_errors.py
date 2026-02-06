@@ -28,7 +28,7 @@ def test_plant_checks(
     try:
         check_plant_health(plant_name, water_level, sunlight_hours)
     except ValueError as e:
-        print(f"Error: {e}")
+        print(f"ValueError: {e}")
 
 
 if __name__ == "__main__":

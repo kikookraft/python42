@@ -55,9 +55,8 @@ def main() -> None:
         print("It seems you have messed up the coordinates")
         return
     for i in range(len(sys.argv[1:])):
-        if len(coords) < 3:
-            coords.append(sys.argv[i+1])
-        else:
+        coords.append(sys.argv[i+1])
+        if len(coords) == 3:
             co: tuple[str, str, str] = (
                 coords[0],
                 coords[1],
@@ -70,14 +69,9 @@ def main() -> None:
                 print(f"Error: {e}")
                 return
             final_co.append(co2)
-    if len(final_co) == 0:
-        try:
-            good_cord: tuple[float, float, float] = check_coord(
-                (coords[0], coords[1], coords[2]))
-        except Exception as e:
-            print(f"Error: {e}")
-            return
-        print(f"Distance to origin: {coords_dist(good_cord, (0, 0, 0))}")
+
+    if len(final_co) == 1:
+        print(f"Distance to origin: {coords_dist(final_co[0], (0, 0, 0))}")
     else:
         print(f"Distace between {final_co[0]} and {final_co[1]}:",
               coords_dist(final_co[0], final_co[1]))

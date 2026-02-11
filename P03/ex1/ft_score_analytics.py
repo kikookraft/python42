@@ -24,9 +24,9 @@ def main() -> None:
             elif i == 2:
                 print("what ?!")
             elif i >= 3 and i < 6:
-                print(f"noo{i*"o"}!")
+                print(f"noo{'o'*i}!")
             else:
-                print(f"ST{"O"*i}PPP {"!"*i}")
+                print(f"ST{'O'*i}PPP {'!'*i}")
     if i > 3:
         print("I see the subject make you crazy too...")
     print("")

@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-"""
-Achievement Tracker System
-
-This module implements an achievement tracking system using sets
-to manage unique achievements and perform set operations for analysis.
-"""
-
 from typing import Dict, Set, List
 
 
@@ -13,13 +5,7 @@ def track_achievements(
     player_data: Dict[str, List[str]]
 ) -> Dict[str, Set[str]]:
     """
-    Convert player achievement lists to sets for efficient tracking.
-
-    Args:
-        player_data: Dictionary mapping player names to lists of achievements
-
-    Returns:
-        Dictionary mapping player names to sets of unique achievements
+    Convert player achievement lists to sets
     """
     return {
         player: set(achievements)
@@ -32,12 +18,6 @@ def find_all_unique_achievements(
 ) -> Set[str]:
     """
     Find all unique achievements across all players using union operation.
-
-    Args:
-        achievement_sets: Dictionary mapping player names to achievement sets
-
-    Returns:
-        Set of all unique achievements across all players
     """
     if not achievement_sets:
         return set()
@@ -54,12 +34,6 @@ def find_common_achievements(
 ) -> Set[str]:
     """
     Find achievements common to all players using intersection operation.
-
-    Args:
-        achievement_sets: Dictionary mapping player names to achievement sets
-
-    Returns:
-        Set of achievements that all players have
     """
     if not achievement_sets:
         return set()
@@ -78,12 +52,6 @@ def find_rare_achievements(
 ) -> Dict[str, Set[str]]:
     """
     Find rare achievements that only one player has.
-
-    Args:
-        achievement_sets: Dictionary mapping player names to achievement sets
-
-    Returns:
-        Dictionary mapping player names to their unique achievements
     """
     rare_achievements: Dict[str, Set[str]] = {}
     all_players = list(achievement_sets.keys())
@@ -115,14 +83,6 @@ def find_player_differences(
 ) -> Dict[str, Set[str]]:
     """
     Find unique achievements for each of two players using difference.
-
-    Args:
-        achievement_sets: Dictionary mapping player names to achievement sets
-        player1: Name of the first player
-        player2: Name of the second player
-
-    Returns:
-        Dictionary with 'common', 'player1_unique', and 'player2_unique' keys
     """
     if player1 not in achievement_sets or player2 not in achievement_sets:
         return {

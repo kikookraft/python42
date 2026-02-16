@@ -51,7 +51,7 @@ def main() -> None:
     """
     args = sys.argv[1:]
     if not args:
-        print("Empty inventory - exiting.")
+        print("where inventory ??")
         return
 
     # Use dict() constructor to create inventory

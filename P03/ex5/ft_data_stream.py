@@ -68,8 +68,12 @@ def demo_random() -> None:
 
 def demo_interactive() -> None:
     """Demonstrate interactive use of generators"""
-    conter_input: int = int(
-        input("Enter starting number for count generator\n> "))
+    try:
+        conter_input: int = int(
+            input("Enter starting number for count generator\n> "))
+    except ValueError:
+        print("Invalid input. Using default starting number 0.")
+        conter_input = 0
     print("Counting:")
     counting: Generator[int, None, None] = count(conter_input)
     for i, num in enumerate(counting):
@@ -79,8 +83,13 @@ def demo_interactive() -> None:
             break
 
     print("\nRandom numbers:")
-    for i, num in enumerate(rnd(seed=42, mini=1, maxi=int(
-            input("Enter maximum number for random generator\n> ")))):
+    try:
+        max_random: int = int(
+            input("Enter maximum number for random generator\n> "))
+    except ValueError:
+        print("Invalid input. Using default maximum number 100.")
+        max_random = 100
+    for i, num in enumerate(rnd(seed=42, mini=1, maxi=max_random)):
         print(num)
         if i >= 9:  # Limit to 10 numbers
             print("... (and more random it goes)")

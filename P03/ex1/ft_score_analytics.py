@@ -30,12 +30,15 @@ def main() -> None:
     if i > 3:
         print("I see the subject make you crazy too...")
     print("")
-    print(f"Statistic time !\n\
-          Total score: {sum(scores)}\n\
-          Best score: {max(scores)}\n\
-          Looser: {min(scores)}\n\
-          Average score: {sum(scores)/len(scores)}\n\
-        ")
+    try:
+        print(f"Statistic time !\n\
+            Total score: {sum(scores)}\n\
+            Best score: {max(scores)}\n\
+            Looser: {min(scores)}\n\
+            Average score: {sum(scores)/len(scores)}\n\
+            ")
+    except ValueError:
+        print("No valid scores to analyze.")
 
 
 if __name__ == "__main__":

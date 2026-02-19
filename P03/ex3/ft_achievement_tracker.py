@@ -7,10 +7,10 @@ def track_achievements(
     """
     Convert player achievement lists to sets
     """
-    return {
-        player: set(achievements)
-        for player, achievements in player_data.items()
-    }
+    result: Dict[str, Set[str]] = {}
+    for player, achievements in player_data.items():
+        result[player] = set(achievements)
+    return result
 
 
 def find_all_unique_achievements(
@@ -103,7 +103,7 @@ def find_player_differences(
 
 def main() -> None:
     """Main function to demonstrate the achievement tracker system."""
-    print("=== Achievement Tracker System ===\n")
+    print("dgvfhsfdshgfdghsdjfhgfgdkjshhjgkfd")
 
     # Sample player data
     player_data: Dict[str, List[str]] = {
@@ -111,7 +111,7 @@ def main() -> None:
             'first_kill', 'level_10', 'treasure_hunter', 'speed_demon'
         ],
         'bob': [
-            'first_kill', 'level_10', 'boss_slayer', 'collector'
+            'first_kill', 'level_10', 'boss_slayer', 'collector', 'test'
         ],
         'charlie': [
             'level_10', 'treasure_hunter', 'boss_slayer',
@@ -124,30 +124,34 @@ def main() -> None:
 
     # Display player achievements
     for player, achievements in achievement_sets.items():
-        print(f"Player {player} achievements: {sorted(achievements)}")
+        print(f"Player {player} achievements: {achievements}")
 
     print("\n=== Achievement Analytics ===")
 
     # Find all unique achievements
     all_unique = find_all_unique_achievements(achievement_sets)
-    print(f"All unique achievements: {sorted(all_unique)}")
+    print(f"All unique achievements: {all_unique}")
     print(f"Total unique achievements: {len(all_unique)}")
 
     # Find common achievements
     common = find_common_achievements(achievement_sets)
-    print(f"\nCommon to all players: {sorted(common)}")
+    print(f"\nCommon to all players: {common}")
 
     # Find rare achievements
     rare = find_rare_achievements(achievement_sets)
-    print(f"Rare achievements (1 player): {sorted(rare.get('bob', set()))}")
+    # Collect all rare achievements into one set
+    all_rare: Set[str] = set()
+    for player_rare in rare.values():
+        all_rare = all_rare.union(player_rare)
+    print(f"Rare achievements (1 player): {all_rare}")
 
     # Compare two players
     alice_bob_diff = find_player_differences(
         achievement_sets, 'alice', 'bob'
     )
-    print(f"\nAlice vs Bob common: {sorted(alice_bob_diff['common'])}")
-    print(f"Alice unique: {sorted(alice_bob_diff['alice_unique'])}")
-    print(f"Bob unique: {sorted(alice_bob_diff['bob_unique'])}")
+    print(f"\nAlice vs Bob common: {alice_bob_diff['common']}")
+    print(f"Alice unique: {alice_bob_diff['alice_unique']}")
+    print(f"Bob unique: {alice_bob_diff['bob_unique']}")
 
 
 if __name__ == "__main__":

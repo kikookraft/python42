@@ -1,123 +1,144 @@
+import typing
 from typing import Generator
 
 
-def base() -> Generator[str, None, None]:
-    """A simple base generator
+def game_event_generator(count: int) -> Generator[dict[str, typing.Any], None, None]:
+    """Generate game events using a pseudo-random generator.
+    
+    Args:
+        count: Number of events to generate
+        
+    Yields:
+        Dictionary containing event data
     """
-    yield "Hello"
-    yield "World"
-    yield "feur"
+    players = ['alice', 'bob', 'charlie', 'diana', 'eve']
+    actions = ['killed monster', 'found treasure', 'leveled up']
+    
+    # Simple LCG for randomness
+    seed = 42
+    a, c, m = 1664525, 1013904223, 2**32
+    
+    for i in range(count):
+        # Generate pseudo-random values
+        seed = (a * seed + c) % m
+        player_idx = seed % len(players)
+        
+        seed = (a * seed + c) % m
+        action_idx = seed % len(actions)
+        
+        seed = (a * seed + c) % m
+        level = 1 + (seed % 20)  # Level between 1 and 20
+        
+        yield {
+            'id': i + 1,
+            'player': players[player_idx],
+            'level': level,
+            'action': actions[action_idx]
+        }
 
 
-def count(start: int = 0, step: int = 1) -> Generator[int, None, None]:
-    """A simple count generator
-
-    This generator yields an infinite sequence of integers, starting from
-    `start` and incrementing by `step` each time.
+def fibonacci_generator(count: int) -> Generator[int, None, None]:
+    """Generate Fibonacci sequence.
+    
+    Args:
+        count: Number of Fibonacci numbers to generate
+        
+    Yields:
+        Next Fibonacci number
     """
-    n = start
-    while True:
-        yield n
-        n += step
+    a, b = 0, 1
+    for _ in range(count):
+        yield a
+        a, b = b, a + b
 
 
-def rnd(
-        seed: int = 0,
-        mini: int = 0,
-        maxi: int = 2**32 - 1
-        ) -> Generator[int, None, None]:
-    """A simple pseudo-random number generator using a linear congruential
-    generator (LCG) algorithm.
+def is_prime(n: int) -> bool:
+    """Check if a number is prime."""
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n ** 0.5) + 1, 2):
+        if n % i == 0:
+            return False
+    return True
 
-    The LCG is defined by the formula:
-        X_{n+1} = (a * X_n + c) % m
 
-    where:
-        - X is the sequence of pseudo-random values
-        - a, c, and m are constants
-        - X_0 is the seed
+def prime_generator(count: int) -> Generator[int, None, None]:
+    """Generate prime numbers.
+    
+    Args:
+        count: Number of primes to generate
+        
+    Yields:
+        Next prime number
     """
-    a = 1664525
-    c = 1013904223
-    m = 2**32
-    x = seed
-    while True:
-        x: int = (a * x + c) % m
-        yield mini + (x % (maxi - mini + 1))
-
-
-def demo_count() -> None:
-    """Demonstrate the count generator"""
-    print("Counting from 5 with step 2:")
-    for i, num in enumerate(count(5, 2)):
-        print(num)
-        if i >= 9:  # Limit to 10 numbers
-            print("... (and more counting it goes)")
-            break
-
-
-def demo_random() -> None:
-    """Demonstrate the rnd generator"""
-    print("Random numbers from 1 to 100:")
-    for i, num in enumerate(rnd(seed=42, mini=1, maxi=100)):
-        print(num)
-        if i >= 9:  # Limit to 10 numbers
-            print("... (and more random it goes)")
-            break
-
-
-def demo_interactive() -> None:
-    """Demonstrate interactive use of generators"""
-    try:
-        conter_input: int = int(
-            input("Enter starting number for count generator\n> "))
-    except ValueError:
-        print("Invalid input. Using default starting number 0.")
-        conter_input = 0
-    print("Counting:")
-    counting: Generator[int, None, None] = count(conter_input)
-    for i, num in enumerate(counting):
-        print(num)
-        if i >= 9:  # Limit to 10 numbers
-            print("... (and blablablaaaa)")
-            break
-
-    print("\nRandom numbers:")
-    try:
-        max_random: int = int(
-            input("Enter maximum number for random generator\n> "))
-    except ValueError:
-        print("Invalid input. Using default maximum number 100.")
-        max_random = 100
-    for i, num in enumerate(rnd(seed=42, mini=1, maxi=max_random)):
-        print(num)
-        if i >= 9:  # Limit to 10 numbers
-            print("... (and more random it goes)")
-            break
-
-
-def go_next() -> None:
-    try:
-        input("Press Enter to get the next value from the generator...\n")
-    except (KeyboardInterrupt, EOFError):
-        print("\nGenerator stopped by user.")
-        return
-    print("\n" + "=" * 40 + "\n")
+    num = 2
+    generated = 0
+    while generated < count:
+        if is_prime(num):
+            yield num
+            generated += 1
+        num += 1
 
 
 def main() -> None:
-    """Demonstrate the generators"""
-    demo: Generator[str, None, None] = base()
-    print("Base generator output:")
-    print(next(demo))  # Hello
-    print(next(demo))  # World
-    print(next(demo))  # feur
-    go_next()
-    demo_count()
-    go_next()
-    demo_random()
-    go_next()
-    demo_interactive()
+    """Demonstrate generator usage with game data streaming."""
+    print("=== Game Data Stream Processor ===")
+    
+    # Generate and process game events
+    event_count = 1000
+    print(f"Processing {event_count} game events...")
+    
+    # Process events using generator (memory efficient)
+    high_level_count = 0
+    treasure_count = 0
+    levelup_count = 0
+    
+    event_stream = game_event_generator(event_count)
+    
+    # Show first few events
+    for event in event_stream:
+        if event['id'] <= 3:
+            print(f"Event {event['id']}: Player {event['player']} "
+                  f"(level {event['level']}) {event['action']}")
+        
+        # Collect statistics
+        if event['level'] >= 10:
+            high_level_count += 1
+        if event['action'] == 'found treasure':
+            treasure_count += 1
+        if event['action'] == 'leveled up':
+            levelup_count += 1
+        
+        if event['id'] == 3:
+            print("...")
+    
+    # Display analytics
+    print("\n=== Stream Analytics ===")
+    print(f"Total events processed: {event_count}")
+    print(f"High-level players (10+): {high_level_count}")
+    print(f"Treasure events: {treasure_count}")
+    print(f"Level-up events: {levelup_count}")
+    print("Memory usage: Constant (streaming)")
+    print("Processing time: [depends on system]")
+    
+    # Demonstrate other generators
+    print("\n=== Generator Demonstration ===")
+    
+    # Fibonacci
+    fib_count = 10
+    fib_numbers = list(fibonacci_generator(fib_count))
+    print(f"Fibonacci sequence (first {fib_count}): "
+          f"{', '.join(map(str, fib_numbers))}")
+    
+    # Primes
+    prime_count = 5
+    prime_numbers = list(prime_generator(prime_count))
+    print(f"Prime numbers (first {prime_count}): "
+          f"{', '.join(map(str, prime_numbers))}")
 
 
 if __name__ == "__main__":

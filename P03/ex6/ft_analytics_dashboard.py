@@ -261,9 +261,6 @@ def main() -> None:
     print("Achievement counts:")
     for player, count in analysis['achievement_counts'].items():
         print(f"  - {player}: {count} achievements")
-    print()
-
-    print("bhgsuycgsfsyfsbyfdsuafushgkjyg")
 
 
 if __name__ == "__main__":

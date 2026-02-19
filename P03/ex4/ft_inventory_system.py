@@ -8,10 +8,8 @@ def inv_add(dico: dict[str, int], name: str, qty: int = 1) -> dict[str, int]:
     Returns the updated dictionary (same object for convenience).
     """
     if qty < 0:
-        # For simplicity, disallow negative additions here.
         raise ValueError("qty must be non-negative")
     if not name:
-        # Disallow empty names for simplicity.
         raise ValueError("name must be non-empty")
 
     if name in dico:
@@ -43,11 +41,8 @@ def _parse_arg(arg: str) -> tuple[str, int]:
 
 
 def main() -> None:
-    """Build inventory from command line arguments and print a
-    simple listing.
-
-    If no items are provided the program prints an informative
-    message and exits.
+    """Build inventory from command line arguments and print detailed
+    analytics demonstrating dictionary operations.
     """
     args = sys.argv[1:]
     if not args:
@@ -61,39 +56,55 @@ def main() -> None:
         qty: int
         name, qty = _parse_arg(item)
         if not name:
-            # skip empty names
             continue
         inv_add(dico, name, qty)
 
-    # Demonstrate dict methods
+    # Calculate total items
+    total_items: int = sum(dico.values())
+
     print("=== Inventory System Analysis ===")
-    print(f"Total items in inventory: {len(dico)}")
+    print(f"Total items in inventory: {total_items}")
+    print(f"Unique item types: {len(dico)}")
 
-    # Use keys() method
-    if dico.keys():
-        print(f"Unique item types: {len(dico.keys())}")
-
+    # Display inventory sorted by quantity (descending)
     print("\n=== Current Inventory ===")
-    # Use items() method to iterate
-    for name, qty in dico.items():
-        print(f"{name}: {qty} units")
+    sorted_items = sorted(dico.items(), key=lambda x: x[1], reverse=True)
+    for name, qty in sorted_items:
+        percentage = (qty / total_items) * 100
+        unit_str = "unit" if qty == 1 else "units"
+        print(f"{name}: {qty} {unit_str} ({percentage:.1f}%)")
 
-    # Use values() to find statistics
-    if dico.values():
-        print("\n=== Inventory Statistics ===")
-        max_item = max(dico, key=lambda k: dico[k])
-        min_item = min(dico, key=lambda k: dico[k])
-        print(f"Most abundant: {max_item} "
-              f"({dico[max_item]} units)")
-        print(f"Least abundant: {min_item} "
-              f"({dico[min_item]} units)")
+    # Statistics
+    print("\n=== Inventory Statistics ===")
+    max_item = max(dico, key=lambda k: dico[k])
+    min_item = min(dico, key=lambda k: dico[k])
+    print(f"Most abundant: {max_item} ({dico[max_item]} units)")
+    print(f"Least abundant: {min_item} ({dico[min_item]} unit)")
 
-    # Demonstrate get() method for safe access
+    # Categorize items (Moderate: >3, Scarce: <=3)
+    print("\n=== Item Categories ===")
+    moderate: dict[str, int] = {k: v for k, v in dico.items() if v > 3}
+    scarce: dict[str, int] = {k: v for k, v in dico.items() if v <= 3}
+    
+    if moderate:
+        print(f"Moderate: {moderate}")
+    if scarce:
+        print(f"Scarce: {scarce}")
+
+    # Management suggestions (restock items with quantity == 1)
+    print("\n=== Management Suggestions ===")
+    restock_needed = [name for name, qty in dico.items() if qty == 1]
+    print(f"Restock needed: {restock_needed}")
+
+    # Demonstrate dictionary methods
     print("\n=== Dictionary Properties Demo ===")
-    sample_items = ["potion", "shield", "nonexistent"]
-    for item in sample_items:
-        in_inventory = item in dico.keys()
-        print(f"Sample lookup - '{item}' in inventory: {in_inventory}")
+    print(f"Dictionary keys: {', '.join(dico.keys())}")
+    print(f"Dictionary values: {', '.join(str(v) for v in dico.values())}")
+    
+    # Demonstrate get() and membership test
+    sample_item = list(dico.keys())[0] if dico else "none"
+    in_inventory = sample_item in dico.keys()
+    print(f"Sample lookup - '{sample_item}' in inventory: {in_inventory}")
 
 
 if __name__ == "__main__":

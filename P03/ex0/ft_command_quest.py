@@ -12,7 +12,11 @@ def main() -> None:
     i: int = 0
     for arg in sys.argv[1:]:
         i += 1
-        print(f"{i} > {arg}")
+        try:
+            num = int(arg)
+            print(f"{i} > {num} (int)")
+        except ValueError:
+            print(f"{i} > {arg}")
 
 
 if __name__ == "__main__":

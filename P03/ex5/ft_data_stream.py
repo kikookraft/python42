@@ -95,7 +95,7 @@ def main() -> None:
                     f"skipping die event because we dont care about "
                     f"{event['player']} dying")
             print(f"Event ID: {event['id']}, Player: {event['player']}, "
-                f"Action: {event['action']}, Level: {event['level']}")
+                  f"Action: {event['action']}, Level: {event['level']}")
     except (KeyboardInterrupt, EOFError):
         print("\n💀💀💀")
 

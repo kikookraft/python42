@@ -213,3 +213,4 @@ P03/exercise_1_helper.py
 *.gz
 P04/data_generator.py
 P04/sample_data.json
+*.txt

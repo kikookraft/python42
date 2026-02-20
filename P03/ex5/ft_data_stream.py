@@ -87,14 +87,17 @@ def main() -> None:
         print(f"Fibonacci number: {num}")
 
     print("\n=== random game events ===")
-    input("Press Enter to start the big mess...")
-    for event in game_event_generator(100000):
-        if event['action'] == 'died':
-            print(
-                f"skipping die event because we dont care about "
-                f"{event['player']} dying")
-        print(f"Event ID: {event['id']}, Player: {event['player']}, "
-              f"Action: {event['action']}, Level: {event['level']}")
+    try:
+        input("Press Enter to start the big mess...")
+        for event in game_event_generator(100000):
+            if event['action'] == 'died':
+                print(
+                    f"skipping die event because we dont care about "
+                    f"{event['player']} dying")
+            print(f"Event ID: {event['id']}, Player: {event['player']}, "
+                f"Action: {event['action']}, Level: {event['level']}")
+    except (KeyboardInterrupt, EOFError):
+        print("\n💀💀💀")
 
 
 if __name__ == "__main__":

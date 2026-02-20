@@ -1,11 +1,13 @@
 import sys
 
+cat: dict[str, list[str]] = {
+        "armor": ["helmet", "chestplate", "leggings", "boots"],
+        "weapon": ["sword", "bow", "axe"],
+        "potion": ["healing", "mana", "strength"]}
+
 
 def inv_add(dico: dict[str, int], name: str, qty: int = 1) -> dict[str, int]:
     """Add quantity for an item name into the inventory dictionary.
-
-    If the item already exists, its quantity is increased by "qty".
-    Returns the updated dictionary (same object for convenience).
     """
     if qty < 0:
         raise ValueError("qty must be non-negative")
@@ -13,9 +15,9 @@ def inv_add(dico: dict[str, int], name: str, qty: int = 1) -> dict[str, int]:
         raise ValueError("name must be non-empty")
 
     if name in dico:
-        dico[name] += qty
+        dico.update({name: dico[name] + qty})
     else:
-        dico[name] = qty
+        dico.update({name: qty})
     return dico
 
 
@@ -40,6 +42,44 @@ def _parse_arg(arg: str) -> tuple[str, int]:
     return name, qty
 
 
+def make_rarity_dict(dico: dict[str, int]) -> dict[str, dict[str, int | str]]:
+    """Categorize items into rarity levels based on quantity."""
+    # find the most present item quantity to set thresholds
+    max_qty: int = max(dico.values()) if dico else 0
+    result: dict[str, dict[str, int | str]] = {}
+    for name, qty in dico.items():
+        if qty > max_qty * 0.5:
+            result[name] = {"quantity": qty,
+                            "rarity": "common",
+                            "value": max_qty - qty}
+        elif qty > max_qty * 0.2:
+            result[name] = {"quantity": qty,
+                            "rarity": "uncommon",
+                            "value": max_qty - qty}
+        else:
+            result[name] = {"quantity": qty,
+                            "rarity": "rare",
+                            "value": max_qty - qty}
+    return result
+
+
+def detect_categories(
+        better_dico: dict[str, dict[str, int | str]]
+        ) -> dict[str, dict[str, int]]:  # idk why pylance is doing shit
+    """Detect item categories based on predefined catalog."""
+    category_counts: dict[str, dict[str, int]] = {}
+    for name, info in better_dico.items():
+        category: str = "unknown"
+        for cat_name, items in cat.items():  # search for category
+            if name in items:
+                category = cat_name
+                break
+            if category not in category_counts:
+                category_counts[category] = {}
+            category_counts[category][name] = int(info["quantity"])
+        return category_counts
+
+
 def main() -> None:
     """Build inventory from command line arguments and print detailed
     analytics demonstrating dictionary operations.
@@ -49,9 +89,8 @@ def main() -> None:
         print("where inventory ??")
         return
 
-    # Use dict() constructor to create inventory
-    dico: dict[str, int] = dict()
-    for item in args:
+    dico: dict[str, int] = dict()  # inventory
+    for item in args:  # parse things
         name: str
         qty: int
         name, qty = _parse_arg(item)
@@ -59,52 +98,59 @@ def main() -> None:
             continue
         inv_add(dico, name, qty)
 
+    # this one is better
+    better_dico: dict[str, dict[str, int | str]] = make_rarity_dict(dico)
+    print("\n=== Inventory with Rarity ===")
+    for name, info in better_dico.items():
+        print(f"{name}: {info['quantity']} units, Rarity: {info['rarity']}")
+
     # Calculate total items
     total_items: int = sum(dico.values())
 
-    print("=== Inventory System Analysis ===")
+    print("\n=== Da inventory ===")
     print(f"Total items in inventory: {total_items}")
     print(f"Unique item types: {len(dico)}")
 
     # Display inventory sorted by quantity (descending)
     print("\n=== Current Inventory ===")
-    sorted_items = sorted(dico.items(), key=lambda x: x[1], reverse=True)
+    sorted_items: list[tuple[str, int]] = sorted(
+        dico.items(), key=lambda x: x[1], reverse=True
+    )
     for name, qty in sorted_items:
-        percentage = (qty / total_items) * 100
-        unit_str = "unit" if qty == 1 else "units"
+        percentage: float = (qty / total_items) * 100
+        unit_str: str = "unit" if qty == 1 else "units"
         print(f"{name}: {qty} {unit_str} ({percentage:.1f}%)")
 
     # Statistics
     print("\n=== Inventory Statistics ===")
-    max_item = max(dico, key=lambda k: dico[k])
-    min_item = min(dico, key=lambda k: dico[k])
+    max_item: str = max(dico, key=lambda k: dico[k])
+    min_item: str = min(dico, key=lambda k: dico[k])
     print(f"Most abundant: {max_item} ({dico[max_item]} units)")
     print(f"Least abundant: {min_item} ({dico[min_item]} unit)")
 
-    # Categorize items (Moderate: >3, Scarce: <=3)
     print("\n=== Item Categories ===")
     moderate: dict[str, int] = {k: v for k, v in dico.items() if v > 3}
     scarce: dict[str, int] = {k: v for k, v in dico.items() if v <= 3}
-    
+
     if moderate:
         print(f"Moderate: {moderate}")
     if scarce:
         print(f"Scarce: {scarce}")
 
-    # Management suggestions (restock items with quantity == 1)
+    # Management suggestions
     print("\n=== Management Suggestions ===")
-    restock_needed = [name for name, qty in dico.items() if qty == 1]
+    restock_needed: list[str] = [
+        name for name, qty in dico.items() if qty == 1
+    ]
     print(f"Restock needed: {restock_needed}")
+    if dico.get("test", 0) == 0:
+        print("You should buy some 'test' it is very yummy !")
+    else:
+        print("Yay you now have some 'test' in your inventory ! Good job !")
 
-    # Demonstrate dictionary methods
     print("\n=== Dictionary Properties Demo ===")
     print(f"Dictionary keys: {', '.join(dico.keys())}")
     print(f"Dictionary values: {', '.join(str(v) for v in dico.values())}")
-    
-    # Demonstrate get() and membership test
-    sample_item = list(dico.keys())[0] if dico else "none"
-    in_inventory = sample_item in dico.keys()
-    print(f"Sample lookup - '{sample_item}' in inventory: {in_inventory}")
 
 
 if __name__ == "__main__":

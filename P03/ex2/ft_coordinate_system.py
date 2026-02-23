@@ -59,7 +59,7 @@ def main() -> None:
     coords: list[tuple[int, int, int]] = []
 
     # take argument as "x,y,z x2,y2,z2"
-    for coordinate in sys.argv:
+    for coordinate in sys.argv[1:]:
         try:
             x, y, z = parse_coordinates(coordinate)
             coords.append((x, y, z))

@@ -21,7 +21,7 @@ def inv_add(dico: dict[str, int], name: str, qty: int = 1) -> dict[str, int]:
     return dico
 
 
-def _parse_arg(arg: str) -> tuple[str, int]:
+def _parse_arg(arg: str) -> tuple[str | None, int]:
     """Parse a single argv entry.
 
     Expected formats:
@@ -34,6 +34,8 @@ def _parse_arg(arg: str) -> tuple[str, int]:
         name, qty_str = arg.split(":", 1)
         try:
             qty = int(qty_str)
+            if qty <= 0:
+                return None, 0
         except ValueError:
             qty = 1
     else:
@@ -77,7 +79,7 @@ def detect_categories(
             if category not in category_counts:
                 category_counts[category] = {}
             category_counts[category][name] = int(info["quantity"])
-        return category_counts
+    return category_counts
 
 
 def main() -> None:
@@ -91,12 +93,17 @@ def main() -> None:
 
     dico: dict[str, int] = dict()  # inventory
     for item in args:  # parse things
-        name: str
+        name: str | None
         qty: int
         name, qty = _parse_arg(item)
         if not name:
             continue
         inv_add(dico, name, qty)
+
+    # check if dico is empty
+    if not dico:
+        print("nothing in the inventory")
+        return
 
     # this one is better
     better_dico: dict[str, dict[str, int | str]] = make_rarity_dict(dico)

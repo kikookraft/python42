@@ -53,6 +53,24 @@ def fibonacci_generator(count: int) -> Generator[int, None, None]:
         a, b = b, a + b
 
 
+def prime_generator(count: int) -> Generator[int, None, None]:
+    """Generate the first 'count' prime numbers."""
+    primes: list[int] = []
+    num = 2
+    while len(primes) < count:
+        is_prime = True
+        for p in primes:
+            if p * p > num:
+                break
+            if num % p == 0:
+                is_prime = False
+                break
+        if is_prime:
+            primes.append(num)
+            yield num
+        num += 1
+
+
 def stream_gen() -> Generator[str, None, None]:
     """Example of a simple string stream generator."""
     messages = [
@@ -85,6 +103,10 @@ def main() -> None:
     print("\n=== and now some maths ===")
     for num in fibonacci_generator(20):
         print(f"Fibonacci number: {num}")
+
+    print("\n=== prime numbers ===")
+    for prime in prime_generator(20):
+        print(f"Prime number: {prime}")
 
     print("\n=== random game events ===")
     try:

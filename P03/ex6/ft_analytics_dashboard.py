@@ -39,8 +39,9 @@ def main() -> None:
         data['score'] * 2 for data in game_data.values()
         if isinstance(data['score'], int)
     ]
-    data = map(lambda x: x * 2, [data['score'] for data in game_data.values()])
-    print(f"Scores doubled (map): {list(data)}")
+    # data = map(lambda x: x * 2,
+    #            [data['score'] for data in game_data.values()])
+    # print(f"Scores doubled (map): {list(data)}")
     print(f"Scores doubled: {scores_doubled}")
 
     # actives players

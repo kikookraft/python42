@@ -35,8 +35,12 @@ def _parse_arg(arg: str) -> tuple[str | None, int]:
         try:
             qty = int(qty_str)
             if qty <= 0:
+                print(f"Warning: quantity must be positive for item '{name}'"
+                      " skipping")
                 return None, 0
         except ValueError:
+            print(f"Warning: invalid quantity '{qty_str}' for item '{name}'"
+                  " defaulting to 1")
             qty = 1
     else:
         name = arg

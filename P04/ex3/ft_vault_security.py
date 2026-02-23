@@ -24,7 +24,6 @@ def main() -> None:
     print("Vault connection established with failsafe protocols")
     print()
 
-    # Secure extraction from classified data
     print("SECURE EXTRACTION:")
     try:
         classified_lines: list[str] = secure_extraction("classified_data.txt")
@@ -34,15 +33,12 @@ def main() -> None:
         print(f"An error occurred during secure extraction: {e}")
     print()
 
-    # Secure preservation of new security protocols
     print("SECURE PRESERVATION:")
     try:
-        with open("security_protocols.txt", 'r') as vault:
-            protocols: str = vault.read()
+        with open("security_protocols.txt", 'w') as vault:
+            vault.write("[CLASSIFIED] New security protocols archived")
     except Exception as e:
         print(f"An error occurred during secure preservation: {e}")
-        protocols = ""
-    print(protocols.strip())
     print()
 
     print("Vault automatically sealed upon completion")

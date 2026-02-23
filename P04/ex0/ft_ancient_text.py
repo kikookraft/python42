@@ -1,6 +1,6 @@
 # import sys
 
-def main():
+def main() -> None:
     print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===")
 
     filename: str = "ancient_fragment.txt"

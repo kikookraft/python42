@@ -26,15 +26,22 @@ def main() -> None:
 
     # Secure extraction from classified data
     print("SECURE EXTRACTION:")
-    classified_lines: list[str] = secure_extraction("../classified_data.txt")
-    for line in classified_lines:
-        print(line)
+    try:
+        classified_lines: list[str] = secure_extraction("classified_data.txt")
+        for line in classified_lines:
+            print(line)
+    except Exception as e:
+        print(f"An error occurred during secure extraction: {e}")
     print()
 
     # Secure preservation of new security protocols
     print("SECURE PRESERVATION:")
-    with open("../security_protocols.txt", 'r') as vault:
-        protocols: str = vault.read()
+    try:
+        with open("security_protocols.txt", 'r') as vault:
+            protocols: str = vault.read()
+    except Exception as e:
+        print(f"An error occurred during secure preservation: {e}")
+        protocols = ""
     print(protocols.strip())
     print()
 

@@ -33,15 +33,12 @@ def main() -> None:
     print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===")
     print()
 
-    # Test 1: Non-existent archive (FileNotFoundError)
     crisis_handler("lost_archive.txt")
     print()
 
-    # Test 2: Security-restricted vault (PermissionError)
     crisis_handler("classified_vault.txt")
     print()
 
-    # Test 3: Standard archive recovery (Success)
     crisis_handler("standard_archive.txt")
     print()
 

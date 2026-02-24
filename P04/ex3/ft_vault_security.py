@@ -36,10 +36,11 @@ def main() -> None:
     print("SECURE PRESERVATION:")
     try:
         with open("security_protocols.txt", 'w') as vault:
-            vault.write("[CLASSIFIED] New security protocols archived")
+            line: str = "[CLASSIFIED] New security protocols archived"
+            vault.write(line)
+            print(line)
     except Exception as e:
         print(f"An error occurred during secure preservation: {e}")
-    print()
 
     print("Vault automatically sealed upon completion")
     print()

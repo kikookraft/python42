@@ -10,5 +10,5 @@ def main():
     print(create_water())
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__": # broken
+#     main()

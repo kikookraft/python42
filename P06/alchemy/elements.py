@@ -23,11 +23,3 @@ def create_air() -> str:
     print("AIR   \n💨💨💨", end="\033[F")
     time.sleep(.5)
     return "Air Element created"
-
-
-if __name__ == "__main__":
-    print("Creating elements...")
-    print(create_fire())
-    print(create_water())
-    print(create_earth())
-    print(create_air())

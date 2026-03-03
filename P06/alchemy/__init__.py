@@ -4,7 +4,7 @@ __author__ = "Master Pythonicus"
 from .elements import create_fire, create_water
 
 
-def main():
+def main() -> None:
     print("Welcome to the Alchemy Lab!")
     print(create_fire())
     print(create_water())

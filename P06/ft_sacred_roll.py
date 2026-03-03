@@ -1,7 +1,7 @@
 import alchemy
 import time
 
-elem_names = ["Fire", "Water", "Earth", "Air"]
+elem_names: list[str] = ["Fire", "Water", "Earth", "Air"]
 
 
 def up() -> None:
@@ -53,7 +53,7 @@ def test_from_import() -> None:
         print(f"{name}: {element}")
 
 
-def main():
+def main() -> None:
     print("Welcome to the Alchemy Lab!")
     test_direct_import()
     up()

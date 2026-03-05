@@ -1,40 +1,31 @@
 """Abstract base class for all DataDeck cards."""
 
 from abc import ABC, abstractmethod
+from typing import Any
 
 
 class Card(ABC):
     """Abstract base class that defines the universal card blueprint."""
 
     def __init__(self, name: str, cost: int, rarity: str) -> None:
-        """Initialize base card attributes.
-
-        Args:
-            name: The card's name.
-            cost: The mana cost to play the card.
-            rarity: The card's rarity tier.
-        """
-        self.name = name
-        self.cost = cost
-        self.rarity = rarity
+        """Initialise base card attributes."""
+        if cost < 0:
+            raise ValueError(f"Cost of the card {name} must be positive.")
+        self.name: str = name
+        self.cost: int = cost
+        self.rarity: str = rarity
 
     @abstractmethod
-    def play(self, game_state: dict) -> dict:
-        """Play this card and apply its effect to the game state.
-
-        Args:
-            game_state: Current state of the game.
-
-        Returns:
-            A dict describing the result of playing the card.
-        """
+    def play(self, game_state: dict[Any, Any]) -> dict[Any, Any]:
         pass
 
-    def get_card_info(self) -> dict:
-        """Return a dictionary with the card's information.
+    def get_card_info(self) -> dict[str, Any]:
+        """Return info of the cards
 
-        Returns:
-            A dict containing name, cost, and rarity.
+        returns:\n
+        - name: str
+        - cost: int
+        - rarity: str
         """
         return {
             "name": self.name,
@@ -43,12 +34,5 @@ class Card(ABC):
         }
 
     def is_playable(self, available_mana: int) -> bool:
-        """Check whether the card can be played with available mana.
-
-        Args:
-            available_mana: The amount of mana currently available.
-
-        Returns:
-            True if the card's cost is covered, False otherwise.
-        """
+        """Check if the card is playable based on cost and available mana"""
         return available_mana >= self.cost

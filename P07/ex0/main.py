@@ -1,5 +1,3 @@
-"""Exercise 0 - Card Foundation demonstration."""
-
 from ex0.CreatureCard import CreatureCard
 
 

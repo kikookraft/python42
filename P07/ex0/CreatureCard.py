@@ -1,10 +1,11 @@
 """Concrete CreatureCard implementation."""
 
+from typing import Any
 from ex0.Card import Card
 
 
 class CreatureCard(Card):
-    """A concrete card representing a creature on the battlefield."""
+    """Card for creatures that implement the abstract method"""
 
     def __init__(
         self,
@@ -26,30 +27,31 @@ class CreatureCard(Card):
         Raises:
             ValueError: If attack or health are not positive integers.
         """
-        if not isinstance(attack, int) or attack <= 0:
-            raise ValueError("Attack must be a positive integer.")
-        if not isinstance(health, int) or health <= 0:
-            raise ValueError("Health must be a positive integer.")
+        if attack < 0:
+            raise ValueError(f"Attack of {name} must be positive integer.")
+        if health < 0:
+            raise ValueError(f"Health of {name} must be positive integer.")
+        if cost < 0:
+            raise ValueError(f"Cost of {name} must be positive integer.")
         super().__init__(name, cost, rarity)
-        self.attack = attack
-        self.health = health
+        self.attack: int = attack
+        self.health: int = health
 
-    def get_card_info(self) -> dict:
+    def get_card_info(self) -> dict[str, int | str]:
         """Return a dictionary with the creature card's full information."""
-        info = super().get_card_info()
+        info: dict[str, Any] = super().get_card_info()
         info["type"] = "Creature"
         info["attack"] = self.attack
         info["health"] = self.health
         return info
 
-    def play(self, game_state: dict) -> dict:
-        """Summon the creature to the battlefield.
+    def play(self, game_state: dict[str, Any]) -> dict[str, Any]:
+        """Summon card on the battlefield.
 
-        Args:
-            game_state: Current game state dictionary.
-
-        Returns:
-            A dict describing the result of playing the card.
+        returns:
+        - card_played: str
+        - mana_used: int
+        - effect: str
         """
         return {
             "card_played": self.name,
@@ -57,14 +59,14 @@ class CreatureCard(Card):
             "effect": "Creature summoned to battlefield",
         }
 
-    def attack_target(self, target: "CreatureCard") -> dict:
-        """Attack another creature.
+    def attack_target(self, target: "CreatureCard") -> dict[str, Any]:
+        """Attack another thing.
 
-        Args:
-            target: The creature being attacked.
-
-        Returns:
-            A dict describing the combat result.
+        returns:
+        - attacker: str
+        - target: str
+        - damage_dealt: int
+        - combat_resolved: bool
         """
         return {
             "attacker": self.name,

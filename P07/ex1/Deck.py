@@ -13,7 +13,7 @@ class Deck:
 
     def __init__(self) -> None:
         """Initialize an empty deck."""
-        self._cards: list = []
+        self._cards: list[Card] = []
 
     def add_card(self, card: Card) -> None:
         """Add a card to the deck.
@@ -52,18 +52,25 @@ class Deck:
             return None
         return self._cards.pop(0)
 
-    def get_deck_stats(self) -> dict:
+    def get_deck_stats(self) -> dict[str, int | float]:
         """Return statistics about the current deck contents.
 
-        Returns:
-            A dict with total card counts by type and average cost.
+        returns:
+        - total_cards: Total number of cards in the deck
+        - creatures: Number of creature cards
+        - spells: Number of spell cards
+        - artifacts: Number of artifact cards
+        - avg_cost: Average mana cost of cards in the deck
         """
-        total = len(self._cards)
-        creatures = sum(1 for c in self._cards if isinstance(c, CreatureCard))
-        spells = sum(1 for c in self._cards if isinstance(c, SpellCard))
-        artifacts = sum(1 for c in self._cards if isinstance(c, ArtifactCard))
-        total_cost = sum(c.cost for c in self._cards)
-        avg_cost = round(total_cost / total, 1) if total else 0.0
+        total: int = len(self._cards)
+        creatures: int = sum(
+            1 for c in self._cards if isinstance(c, CreatureCard))
+        spells: int = sum(
+            1 for c in self._cards if isinstance(c, SpellCard))
+        artifacts: int = sum(
+            1 for c in self._cards if isinstance(c, ArtifactCard))
+        total_cost: int = sum(c.cost for c in self._cards)
+        avg_cost: float = round(total_cost / total, 1) if total else 0.0
         return {
             "total_cards": total,
             "creatures": creatures,

@@ -1,5 +1,3 @@
-"""Abstract ranking interface for tournament participants."""
-
 from abc import ABC, abstractmethod
 
 
@@ -8,36 +6,20 @@ class Rankable(ABC):
 
     @abstractmethod
     def calculate_rating(self) -> int:
-        """Calculate and return the current rating.
-
-        Returns:
-            The computed rating as an integer.
-        """
+        """Calculate and return the current rating."""
         pass
 
     @abstractmethod
     def update_wins(self, wins: int) -> None:
-        """Update the win count.
-
-        Args:
-            wins: Number of wins to add.
-        """
+        """Update the win count."""
         pass
 
     @abstractmethod
     def update_losses(self, losses: int) -> None:
-        """Update the loss count.
-
-        Args:
-            losses: Number of losses to add.
-        """
+        """Update the loss count."""
         pass
 
     @abstractmethod
-    def get_rank_info(self) -> dict:
-        """Return ranking information.
-
-        Returns:
-            A dict with ranking data.
-        """
+    def get_rank_info(self) -> dict[str, str | int]:
+        """Return ranking information."""
         pass

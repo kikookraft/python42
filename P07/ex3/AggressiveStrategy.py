@@ -1,5 +1,4 @@
-"""Concrete aggressive game strategy."""
-
+from typing import Any
 from ex3.GameStrategy import GameStrategy
 
 
@@ -10,15 +9,11 @@ class AggressiveStrategy(GameStrategy):
         """Return the strategy name."""
         return "AggressiveStrategy"
 
-    def prioritize_targets(self, available_targets: list) -> list:
-        """Sort targets: enemy player first, then enemy creatures.
-
-        Args:
-            available_targets: List of possible targets.
-
-        Returns:
-            Ordered list of targets.
-        """
+    def prioritize_targets(
+        self,
+        available_targets: list[Any],
+    ) -> list[Any]:
+        """Sort targets: enemy player first, then enemy creatures."""
         player_targets = [
             t for t in available_targets if "Player" in str(t)
         ]
@@ -27,20 +22,21 @@ class AggressiveStrategy(GameStrategy):
         ]
         return player_targets + other_targets
 
-    def execute_turn(self, hand: list, battlefield: list) -> dict:
+    def execute_turn(
+        self,
+        hand: list[Any],
+        battlefield: list[Any],
+    ) -> dict[str, Any]:
         """Play low-cost cards first and attack aggressively.
-
-        Args:
-            hand: Cards currently in hand.
-            battlefield: Cards currently on the battlefield.
-
-        Returns:
-            A dict describing the turn actions taken.
+        returns:
+        - strategy: The strategy name used
+        - actions: dict with cards_played, mana_used, targets_attacked,
+          damage_dealt
         """
         sorted_hand = sorted(hand, key=lambda c: c.cost)
         mana_budget = sum(c.cost for c in sorted_hand)
         mana_used = 0
-        cards_played = []
+        cards_played: list[str] = []
         for card in sorted_hand:
             if mana_used + card.cost <= mana_budget:
                 cards_played.append(card.name)

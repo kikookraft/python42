@@ -1,5 +1,3 @@
-"""TournamentCard: Card + Combatable + Rankable."""
-
 from ex0.Card import Card
 from ex2.Combatable import Combatable
 from ex4.Rankable import Rankable
@@ -18,7 +16,7 @@ class TournamentCard(Card, Combatable, Rankable):
         attack: int,
         defense: int,
     ) -> None:
-        """Initialise a tournament card.
+        """Initialize a tournament card.
 
         Args:
             name: The card's name.
@@ -28,28 +26,33 @@ class TournamentCard(Card, Combatable, Rankable):
             defense: Defense / block value.
         """
         super().__init__(name, cost, rarity)
-        self.attack_power = attack
-        self.defense = defense
-        self._wins = 0
-        self._losses = 0
-        self._rating = self._BASE_RATING + (attack * 10) + (defense * 5)
+        self.attack_power: int = attack
+        self.defense: int = defense
+        self._wins: int = 0
+        self._losses: int = 0
+        self._rating: int = (
+            self._BASE_RATING + (attack * 10) + (defense * 5)
+        )
 
-    def get_card_info(self) -> dict:
-        """Return full card information."""
-        info = super().get_card_info()
+    def get_card_info(self) -> dict[str, str | int]:
+        """Return full card information.
+        returns:
+        - type: Tournament
+        - attack: The card's attack power
+        - defense: The card's defense value
+        """
+        info: dict[str, str | int] = super().get_card_info()
         info["type"] = "Tournament"
         info["attack"] = self.attack_power
         info["defense"] = self.defense
         return info
 
-    def play(self, game_state: dict) -> dict:
+    def play(self, game_state: dict[str, int]) -> dict[str, str | int]:
         """Deploy the tournament card onto the battlefield.
-
-        Args:
-            game_state: Current game state dictionary.
-
-        Returns:
-            A dict describing the play result.
+        returns:
+        - card_played: The name of the card played
+        - mana_used: The mana cost of the card
+        - effect: A description of the effect applied
         """
         return {
             "card_played": self.name,
@@ -59,16 +62,14 @@ class TournamentCard(Card, Combatable, Rankable):
 
     # --- Combatable ---
 
-    def attack(self, target) -> dict:
+    def attack(self, target: "Combatable") -> dict[str, str | int]:
         """Attack a target using melee combat.
-
-        Args:
-            target: The target being attacked.
-
-        Returns:
-            A dict describing the attack result.
+        returns:
+        - attacker: The name of the attacking card
+        - target: The name of the target
+        - damage: The amount of damage dealt
         """
-        target_name = (
+        target_name: str = (
             target.name if hasattr(target, "name") else str(target)
         )
         return {
@@ -77,24 +78,22 @@ class TournamentCard(Card, Combatable, Rankable):
             "damage": self.attack_power,
         }
 
-    def defend(self, incoming_damage: int) -> dict:
+    def defend(self, incoming_damage: int) -> dict[str, str | int]:
         """Defend against incoming damage.
-
-        Args:
-            incoming_damage: The damage coming in.
-
-        Returns:
-            A dict describing the defense result.
+        returns:
+        - defender: The name of the defending card
+        - damage_taken: The amount of damage taken after blocking
+        - damage_blocked: The amount of damage blocked
         """
-        blocked = min(self.defense, incoming_damage)
-        taken = incoming_damage - blocked
+        blocked: int = min(self.defense, incoming_damage)
+        taken: int = incoming_damage - blocked
         return {
             "defender": self.name,
             "damage_taken": taken,
             "damage_blocked": blocked,
         }
 
-    def get_combat_stats(self) -> dict:
+    def get_combat_stats(self) -> dict[str, str | int]:
         """Return combat statistics."""
         return {
             "name": self.name,
@@ -105,36 +104,26 @@ class TournamentCard(Card, Combatable, Rankable):
     # --- Rankable ---
 
     def calculate_rating(self) -> int:
-        """Calculate the current ELO-style rating.
-
-        Returns:
-            The current rating as an integer.
-        """
+        """Calculate the current ELO-style rating."""
         return self._rating
 
     def update_wins(self, wins: int) -> None:
-        """Add wins and increase rating.
-
-        Args:
-            wins: Number of wins to add.
-        """
+        """Add wins and increase rating."""
         self._wins += wins
         self._rating += wins * 16
 
     def update_losses(self, losses: int) -> None:
-        """Add losses and decrease rating.
-
-        Args:
-            losses: Number of losses to add.
-        """
+        """Add losses and decrease rating."""
         self._losses += losses
         self._rating -= losses * 16
 
-    def get_rank_info(self) -> dict:
+    def get_rank_info(self) -> dict[str, str | int]:
         """Return current rank information.
-
-        Returns:
-            A dict with wins, losses, and rating.
+        returns:
+        - name: The card's name
+        - wins: Total wins
+        - losses: Total losses
+        - rating: Current rating
         """
         return {
             "name": self.name,
@@ -143,12 +132,8 @@ class TournamentCard(Card, Combatable, Rankable):
             "rating": self._rating,
         }
 
-    def get_tournament_stats(self) -> dict:
-        """Return comprehensive tournament statistics.
-
-        Returns:
-            A dict combining card info and rank info.
-        """
-        stats = self.get_card_info()
+    def get_tournament_stats(self) -> dict[str, str | int]:
+        """Return comprehensive tournament statistics."""
+        stats: dict[str, str | int] = self.get_card_info()
         stats.update(self.get_rank_info())
         return stats

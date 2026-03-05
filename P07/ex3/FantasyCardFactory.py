@@ -1,7 +1,4 @@
-"""Fantasy-themed concrete card factory."""
-
 import random
-from typing import Optional
 from ex0.Card import Card
 from ex0.CreatureCard import CreatureCard
 from ex1.SpellCard import SpellCard
@@ -12,7 +9,7 @@ from ex3.CardFactory import CardFactory
 class FantasyCardFactory(CardFactory):
     """Creates fantasy-themed cards: dragons, spells, and magical items."""
 
-    _CREATURES = [
+    _CREATURES: list[dict[str, str | int]] = [
         {"name": "Fire Dragon", "cost": 5, "rarity": "Legendary",
          "attack": 7, "health": 5},
         {"name": "Goblin Warrior", "cost": 2, "rarity": "Common",
@@ -21,7 +18,7 @@ class FantasyCardFactory(CardFactory):
          "attack": 3, "health": 4},
     ]
 
-    _SPELLS = [
+    _SPELLS: list[dict[str, str | int]] = [
         {"name": "Fireball", "cost": 4, "rarity": "Uncommon",
          "effect_type": "damage"},
         {"name": "Ice Shard", "cost": 2, "rarity": "Common",
@@ -30,7 +27,7 @@ class FantasyCardFactory(CardFactory):
          "effect_type": "heal"},
     ]
 
-    _ARTIFACTS = [
+    _ARTIFACTS: list[dict[str, str | int]] = [
         {"name": "Mana Ring", "cost": 2, "rarity": "Uncommon",
          "durability": 5, "effect": "+1 mana per turn"},
         {"name": "Dragon Staff", "cost": 4, "rarity": "Rare",
@@ -39,7 +36,7 @@ class FantasyCardFactory(CardFactory):
          "durability": 4, "effect": "+1 mana per turn"},
     ]
 
-    def get_supported_types(self) -> dict:
+    def get_supported_types(self) -> dict[str, list[str]]:
         """Return the card types supported by the fantasy factory."""
         return {
             "creatures": ["dragon", "goblin"],
@@ -49,16 +46,9 @@ class FantasyCardFactory(CardFactory):
 
     def create_creature(
         self,
-        name_or_power: Optional[str | int] = None,
+        name_or_power: str | int | None = None,
     ) -> Card:
-        """Create a fantasy creature card.
-
-        Args:
-            name_or_power: Optional creature name or power level.
-
-        Returns:
-            A CreatureCard instance.
-        """
+        """Create a fantasy creature card."""
         if isinstance(name_or_power, str):
             data = next(
                 (c for c in self._CREATURES if c["name"] == name_or_power),
@@ -69,25 +59,18 @@ class FantasyCardFactory(CardFactory):
         if data is None:
             data = random.choice(self._CREATURES)
         return CreatureCard(
-            data["name"],
-            data["cost"],
-            data["rarity"],
-            data["attack"],
-            data["health"],
+            str(data["name"]),
+            int(data["cost"]),
+            str(data["rarity"]),
+            int(data["attack"]),
+            int(data["health"]),
         )
 
     def create_spell(
         self,
-        name_or_power: Optional[str | int] = None,
+        name_or_power: str | int | None = None,
     ) -> Card:
-        """Create a fantasy spell card.
-
-        Args:
-            name_or_power: Optional spell name or power level.
-
-        Returns:
-            A SpellCard instance.
-        """
+        """Create a fantasy spell card."""
         if isinstance(name_or_power, str):
             data = next(
                 (s for s in self._SPELLS if s["name"] == name_or_power),
@@ -98,24 +81,17 @@ class FantasyCardFactory(CardFactory):
         if data is None:
             data = random.choice(self._SPELLS)
         return SpellCard(
-            data["name"],
-            data["cost"],
-            data["rarity"],
-            data["effect_type"],
+            str(data["name"]),
+            int(data["cost"]),
+            str(data["rarity"]),
+            str(data["effect_type"]),
         )
 
     def create_artifact(
         self,
-        name_or_power: Optional[str | int] = None,
+        name_or_power: str | int | None = None,
     ) -> Card:
-        """Create a fantasy artifact card.
-
-        Args:
-            name_or_power: Optional artifact name or power level.
-
-        Returns:
-            An ArtifactCard instance.
-        """
+        """Create a fantasy artifact card."""
         if isinstance(name_or_power, str):
             data = next(
                 (a for a in self._ARTIFACTS if a["name"] == name_or_power),
@@ -126,21 +102,19 @@ class FantasyCardFactory(CardFactory):
         if data is None:
             data = random.choice(self._ARTIFACTS)
         return ArtifactCard(
-            data["name"],
-            data["cost"],
-            data["rarity"],
-            data["durability"],
-            data["effect"],
+            str(data["name"]),
+            int(data["cost"]),
+            str(data["rarity"]),
+            int(data["durability"]),
+            str(data["effect"]),
         )
 
-    def create_themed_deck(self, size: int) -> dict:
+    def create_themed_deck(self, size: int) -> dict[str, list[Card]]:
         """Create a themed deck split evenly across card types.
-
-        Args:
-            size: Total number of cards to create.
-
-        Returns:
-            A dict mapping 'creatures', 'spells', 'artifacts' to card lists.
+        returns:
+        - creatures: list of CreatureCard instances
+        - spells: list of SpellCard instances
+        - artifacts: list of ArtifactCard instances
         """
         third = size // 3
         remainder = size - third * 3

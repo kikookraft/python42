@@ -1,5 +1,3 @@
-"""Tournament platform managing registered cards and matches."""
-
 from ex4.TournamentCard import TournamentCard
 
 
@@ -8,18 +6,11 @@ class TournamentPlatform:
 
     def __init__(self) -> None:
         """Initialise the platform with empty registry and match log."""
-        self._registry: dict = {}
-        self._matches: list = []
+        self._registry: dict[str, TournamentCard] = {}
+        self._matches: list[dict[str, str | int]] = []
 
     def register_card(self, card: TournamentCard) -> str:
-        """Register a card and return its unique tournament ID.
-
-        Args:
-            card: The TournamentCard to register.
-
-        Returns:
-            A string ID for the registered card.
-        """
+        """Register a card and return its unique tournament ID."""
         base = card.name.lower().replace(" ", "_")
         existing = sum(
             1 for k in self._registry if k.startswith(base)
@@ -28,15 +19,15 @@ class TournamentPlatform:
         self._registry[card_id] = card
         return card_id
 
-    def create_match(self, card1_id: str, card2_id: str) -> dict:
+    def create_match(
+        self, card1_id: str, card2_id: str
+    ) -> dict[str, str | int]:
         """Simulate a match between two registered cards.
-
-        Args:
-            card1_id: ID of the first card.
-            card2_id: ID of the second card.
-
-        Returns:
-            A dict with winner, loser, and updated ratings.
+        returns:
+        - winner: ID of the winning card
+        - loser: ID of the losing card
+        - winner_rating: Updated rating of the winner
+        - loser_rating: Updated rating of the loser
 
         Raises:
             KeyError: If either card ID is not registered.
@@ -57,7 +48,7 @@ class TournamentPlatform:
         winner.update_wins(1)
         loser.update_losses(1)
 
-        result = {
+        result: dict[str, str | int] = {
             "winner": winner_id,
             "loser": loser_id,
             "winner_rating": winner.calculate_rating(),
@@ -66,18 +57,21 @@ class TournamentPlatform:
         self._matches.append(result)
         return result
 
-    def get_leaderboard(self) -> list:
+    def get_leaderboard(self) -> list[dict[str, str | int]]:
         """Return cards sorted by rating (highest first).
-
-        Returns:
-            A list of dicts with rank, name, rating, and record.
+        returns:
+        - rank: Position on the leaderboard
+        - id: The card's tournament ID
+        - name: The card's name
+        - rating: Current rating
+        - record: Win-loss record as "W-L"
         """
         sorted_cards = sorted(
             self._registry.items(),
             key=lambda item: item[1].calculate_rating(),
             reverse=True,
         )
-        board = []
+        board: list[dict[str, str | int]] = []
         for rank, (card_id, card) in enumerate(sorted_cards, start=1):
             info = card.get_rank_info()
             board.append({
@@ -89,15 +83,17 @@ class TournamentPlatform:
             })
         return board
 
-    def generate_tournament_report(self) -> dict:
+    def generate_tournament_report(self) -> dict[str, str | int]:
         """Generate a summary report of the entire tournament.
-
-        Returns:
-            A dict with totals and platform status.
+        returns:
+        - total_cards: Number of registered cards
+        - matches_played: Total matches simulated
+        - avg_rating: Average rating across all cards
+        - platform_status: Current platform status string
         """
         total_cards = len(self._registry)
         matches_played = len(self._matches)
-        avg_rating = (
+        avg_rating: int = (
             sum(c.calculate_rating() for c in self._registry.values())
             // total_cards
             if total_cards

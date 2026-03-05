@@ -1,8 +1,13 @@
-"""Exercise 3 - Game Engine demonstration."""
-
-from ex3.FantasyCardFactory import FantasyCardFactory
-from ex3.AggressiveStrategy import AggressiveStrategy
-from ex3.GameEngine import GameEngine
+try:
+    from ex3.FantasyCardFactory import FantasyCardFactory
+    from ex3.AggressiveStrategy import AggressiveStrategy
+    from ex3.GameEngine import GameEngine
+except ImportError:
+    print(
+        "WARNING: you are using the module wrongly.\n"
+        "launch this using 'py -m ex3.main' in the root directory."
+    )
+    exit(1)
 
 
 def main() -> None:
@@ -21,11 +26,11 @@ def main() -> None:
     engine.configure_engine(factory, strategy)
 
     print("\nSimulating aggressive turn...")
-    turn_result = engine.simulate_turn()
-    hand_str = ", ".join(turn_result["hand"])
+    turn_result: dict = engine.simulate_turn()
+    hand_str: str = ", ".join(turn_result["hand"])
     print(f"Hand: [{hand_str}]")
     print("\nTurn execution:")
-    exec_data = turn_result["turn_execution"]
+    exec_data: dict = turn_result["turn_execution"]
     print(f"Strategy: {exec_data.get('strategy', 'N/A')}")
     print(f"Actions: {exec_data.get('actions', {})}")
 

@@ -1,5 +1,4 @@
-"""Game engine that orchestrates card factories and strategies."""
-
+from typing import Any
 from ex3.CardFactory import CardFactory
 from ex3.GameStrategy import GameStrategy
 
@@ -11,8 +10,8 @@ class GameEngine:
         """Initialise the engine with no factory or strategy set."""
         self._factory: CardFactory | None = None
         self._strategy: GameStrategy | None = None
-        self._hand: list = []
-        self._battlefield: list = []
+        self._hand: list[Any] = []
+        self._battlefield: list[Any] = []
         self._turns_simulated: int = 0
         self._total_damage: int = 0
         self._cards_created: int = 0
@@ -22,12 +21,7 @@ class GameEngine:
         factory: CardFactory,
         strategy: GameStrategy,
     ) -> None:
-        """Configure the engine with a factory and strategy.
-
-        Args:
-            factory: The card factory to use.
-            strategy: The game strategy to apply.
-        """
+        """Configure the engine with a factory and strategy."""
         self._factory = factory
         self._strategy = strategy
 
@@ -37,11 +31,11 @@ class GameEngine:
         self._hand = [creature, spell, artifact]
         self._cards_created = len(self._hand)
 
-    def simulate_turn(self) -> dict:
+    def simulate_turn(self) -> dict[str, Any]:
         """Simulate one game turn using the configured strategy.
-
-        Returns:
-            A dict summarising the turn outcome.
+        returns:
+        - hand: list of card summaries as strings
+        - turn_execution: the strategy result dict
 
         Raises:
             RuntimeError: If the engine has not been configured.
@@ -51,7 +45,7 @@ class GameEngine:
                 "Engine not configured. Call configure_engine first."
             )
 
-        hand_summary = [
+        hand_summary: list[str] = [
             f"{c.name} ({c.cost})" for c in self._hand
         ]
         result = self._strategy.execute_turn(self._hand, self._battlefield)
@@ -65,13 +59,15 @@ class GameEngine:
             "turn_execution": result,
         }
 
-    def get_engine_status(self) -> dict:
+    def get_engine_status(self) -> dict[str, str | int]:
         """Return a summary report of the engine's activity.
-
-        Returns:
-            A dict with turn count, strategy used, totals, and card count.
+        returns:
+        - turns_simulated: number of turns run
+        - strategy_used: name of the active strategy
+        - total_damage: cumulative damage dealt
+        - cards_created: number of cards in the starting hand
         """
-        strategy_name = (
+        strategy_name: str = (
             self._strategy.get_strategy_name()
             if self._strategy
             else "None"

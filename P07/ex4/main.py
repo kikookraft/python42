@@ -1,10 +1,15 @@
-"""Exercise 4 - Tournament Platform demonstration."""
-
-from ex4.TournamentCard import TournamentCard
-from ex4.TournamentPlatform import TournamentPlatform
-from ex2.Combatable import Combatable
-from ex4.Rankable import Rankable
-from ex0.Card import Card
+try:
+    from ex4.TournamentCard import TournamentCard
+    from ex4.TournamentPlatform import TournamentPlatform
+    from ex2.Combatable import Combatable
+    from ex4.Rankable import Rankable
+    from ex0.Card import Card
+except ImportError:
+    print(
+        "WARNING: you are using the module wrongly.\n"
+        "launch this using 'py -m ex4.main' in the root directory."
+    )
+    exit(1)
 
 
 def main() -> None:
@@ -17,20 +22,22 @@ def main() -> None:
     dragon = TournamentCard("Fire Dragon", 5, "Legendary", 7, 5)
     wizard = TournamentCard("Ice Wizard", 4, "Rare", 3, 6)
 
-    dragon_id = platform.register_card(dragon)
-    wizard_id = platform.register_card(wizard)
+    dragon_id: str = platform.register_card(dragon)
+    wizard_id: str = platform.register_card(wizard)
 
-    interfaces = [Card.__name__, Combatable.__name__, Rankable.__name__]
+    interfaces: list[str] = [
+        Card.__name__, Combatable.__name__, Rankable.__name__
+    ]
     for card, card_id in [(dragon, dragon_id), (wizard, wizard_id)]:
-        rank_info = card.get_rank_info()
-        record = f"{rank_info['wins']}-{rank_info['losses']}"
+        rank_info: dict = card.get_rank_info()
+        record: str = f"{rank_info['wins']}-{rank_info['losses']}"
         print(f"\n{card.name} (ID: {card_id}):")
         print(f"- Interfaces: {interfaces}")
         print(f"- Rating: {card.calculate_rating()}")
         print(f"- Record: {record}")
 
     print("\nCreating tournament match...")
-    match_result = platform.create_match(dragon_id, wizard_id)
+    match_result: dict = platform.create_match(dragon_id, wizard_id)
     print(f"Match result: {match_result}")
 
     print("\nTournament Leaderboard:")

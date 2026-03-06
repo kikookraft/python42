@@ -118,7 +118,8 @@ class FantasyCardFactory(CardFactory):
         """
         third: int = size // 3
         remainder: int = size - third * 3
-        creatures: list[Card] = [self.create_creature() for _ in range(third + remainder)]
+        creatures: list[Card] = [
+            self.create_creature() for _ in range(third + remainder)]
         spells: list[Card] = [self.create_spell() for _ in range(third)]
         artifacts: list[Card] = [self.create_artifact() for _ in range(third)]
         return {

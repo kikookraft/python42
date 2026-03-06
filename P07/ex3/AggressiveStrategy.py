@@ -14,10 +14,10 @@ class AggressiveStrategy(GameStrategy):
         available_targets: list[Any],
     ) -> list[Any]:
         """Sort targets: enemy player first, then enemy creatures."""
-        player_targets = [
+        player_targets: list[Any] = [
             t for t in available_targets if "Player" in str(t)
         ]
-        other_targets = [
+        other_targets: list[Any] = [
             t for t in available_targets if "Player" not in str(t)
         ]
         return player_targets + other_targets
@@ -33,8 +33,8 @@ class AggressiveStrategy(GameStrategy):
         - actions: dict with cards_played, mana_used, targets_attacked,
           damage_dealt
         """
-        sorted_hand = sorted(hand, key=lambda c: c.cost)
-        mana_budget = sum(c.cost for c in sorted_hand)
+        sorted_hand: list[Any] = sorted(hand, key=lambda c: c.cost)
+        mana_budget: int = sum(c.cost for c in sorted_hand)
         mana_used = 0
         cards_played: list[str] = []
         for card in sorted_hand:
@@ -42,14 +42,14 @@ class AggressiveStrategy(GameStrategy):
                 cards_played.append(card.name)
                 mana_used += card.cost
 
-        targets = self.prioritize_targets(["Enemy Player"])
-        damage = sum(c.cost for c in hand)
+        targets: list[Any] = self.prioritize_targets(["Enemy Player"])
+        damage: int = sum(c.cost for c in hand)
         return {
             "strategy": self.get_strategy_name(),
             "actions": {
                 "cards_played": cards_played,
                 "mana_used": mana_used,
                 "targets_attacked": targets,
-                "damage_dealt": damage,
+                "damage_dealt": damage
             },
         }

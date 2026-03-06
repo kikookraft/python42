@@ -1,3 +1,6 @@
+from typing import Any
+
+
 try:
     from ex3.FantasyCardFactory import FantasyCardFactory
     from ex3.AggressiveStrategy import AggressiveStrategy
@@ -26,24 +29,16 @@ def main() -> None:
     engine.configure_engine(factory, strategy)
 
     print("\nSimulating aggressive turn...")
-    turn_result: dict = engine.simulate_turn()
+    turn_result: dict[str, Any] = engine.simulate_turn()
     hand_str: str = ", ".join(turn_result["hand"])
     print(f"Hand: [{hand_str}]")
     print("\nTurn execution:")
-    exec_data: dict = turn_result["turn_execution"]
+    exec_data: dict[str, Any] = turn_result["turn_execution"]
     print(f"Strategy: {exec_data.get('strategy', 'N/A')}")
     print(f"Actions: {exec_data.get('actions', {})}")
 
     print("\nGame Report:")
     print(engine.get_engine_status())
-
-    print(
-        "\nAbstract Factory + Strategy Pattern: Maximum flexibility achieved!"
-    )
-    print(
-        "\nHow do Abstract Factory and Strategy patterns work together? "
-        "What makes this combination powerful for game engine systems?"
-    )
 
 
 if __name__ == "__main__":

@@ -50,7 +50,7 @@ class FantasyCardFactory(CardFactory):
     ) -> Card:
         """Create a fantasy creature card."""
         if isinstance(name_or_power, str):
-            data = next(
+            data: dict[str, str | int] | None = next(
                 (c for c in self._CREATURES if c["name"] == name_or_power),
                 None,
             )
@@ -72,7 +72,7 @@ class FantasyCardFactory(CardFactory):
     ) -> Card:
         """Create a fantasy spell card."""
         if isinstance(name_or_power, str):
-            data = next(
+            data: dict[str, str | int] | None = next(
                 (s for s in self._SPELLS if s["name"] == name_or_power),
                 None,
             )
@@ -93,7 +93,7 @@ class FantasyCardFactory(CardFactory):
     ) -> Card:
         """Create a fantasy artifact card."""
         if isinstance(name_or_power, str):
-            data = next(
+            data: dict[str, str | int] | None = next(
                 (a for a in self._ARTIFACTS if a["name"] == name_or_power),
                 None,
             )
@@ -116,11 +116,11 @@ class FantasyCardFactory(CardFactory):
         - spells: list of SpellCard instances
         - artifacts: list of ArtifactCard instances
         """
-        third = size // 3
-        remainder = size - third * 3
-        creatures = [self.create_creature() for _ in range(third + remainder)]
-        spells = [self.create_spell() for _ in range(third)]
-        artifacts = [self.create_artifact() for _ in range(third)]
+        third: int = size // 3
+        remainder: int = size - third * 3
+        creatures: list[Card] = [self.create_creature() for _ in range(third + remainder)]
+        spells: list[Card] = [self.create_spell() for _ in range(third)]
+        artifacts: list[Card] = [self.create_artifact() for _ in range(third)]
         return {
             "creatures": creatures,
             "spells": spells,

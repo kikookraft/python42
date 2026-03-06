@@ -1,4 +1,5 @@
 from typing import Any
+from ex0.Card import Card
 from ex3.CardFactory import CardFactory
 from ex3.GameStrategy import GameStrategy
 
@@ -25,9 +26,9 @@ class GameEngine:
         self._factory = factory
         self._strategy = strategy
 
-        creature = factory.create_creature()
-        spell = factory.create_spell()
-        artifact = factory.create_artifact()
+        creature: Card = factory.create_creature()
+        spell: Card = factory.create_spell()
+        artifact: Card = factory.create_artifact()
         self._hand = [creature, spell, artifact]
         self._cards_created = len(self._hand)
 
@@ -48,9 +49,10 @@ class GameEngine:
         hand_summary: list[str] = [
             f"{c.name} ({c.cost})" for c in self._hand
         ]
-        result = self._strategy.execute_turn(self._hand, self._battlefield)
-        actions = result.get("actions", {})
-        damage = actions.get("damage_dealt", 0)
+        result: dict[str, Any] = self._strategy.execute_turn(
+            self._hand, self._battlefield)
+        actions: dict[str, Any] = result.get("actions", {})
+        damage: int = actions.get("damage_dealt", 0)
         self._total_damage += damage
         self._turns_simulated += 1
 

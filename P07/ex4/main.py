@@ -29,7 +29,7 @@ def main() -> None:
         Card.__name__, Combatable.__name__, Rankable.__name__
     ]
     for card, card_id in [(dragon, dragon_id), (wizard, wizard_id)]:
-        rank_info: dict = card.get_rank_info()
+        rank_info: dict[str, int | str] = card.get_rank_info()
         record: str = f"{rank_info['wins']}-{rank_info['losses']}"
         print(f"\n{card.name} (ID: {card_id}):")
         print(f"- Interfaces: {interfaces}")
@@ -37,7 +37,8 @@ def main() -> None:
         print(f"- Record: {record}")
 
     print("\nCreating tournament match...")
-    match_result: dict = platform.create_match(dragon_id, wizard_id)
+    match_result: dict[str, str | int] = platform.create_match(
+        dragon_id, wizard_id)
     print(f"Match result: {match_result}")
 
     print("\nTournament Leaderboard:")
@@ -50,13 +51,7 @@ def main() -> None:
     print("\nPlatform Report:")
     print(platform.generate_tournament_report())
 
-    print("\n=== Tournament Platform Successfully Deployed! ===")
-    print("All abstract patterns working together harmoniously!")
-    print(
-        "\nHow does multiple inheritance allow a class to implement several "
-        "interfaces? What are the benefits of combining ranking capabilities "
-        "with card game mechanics?"
-    )
+    print("\n=== Tournament is over! ===")
 
 
 if __name__ == "__main__":

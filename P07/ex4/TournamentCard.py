@@ -54,10 +54,22 @@ class TournamentCard(Card, Combatable, Rankable):
         - mana_used: The mana cost of the card
         - effect: A description of the effect applied
         """
+        if game_state.get("mana", 0) < self.cost:
+            return {
+                "card_played": self.name,
+                "mana_used": 0,
+                "effect": "Not enough mana to play the card",
+            }
+        if self.attack_power > 5:
+            effect_desc: str = "Powerful attack boosts morale!"
+        elif self.defense > 5:
+            effect_desc = "Sturdy defense inspires confidence!"
+        else:
+            effect_desc = "A balanced card enters the arena."
         return {
             "card_played": self.name,
             "mana_used": self.cost,
-            "effect": "Tournament card entered the arena",
+            "effect": effect_desc,
         }
 
     # --- Combatable ---
@@ -69,9 +81,7 @@ class TournamentCard(Card, Combatable, Rankable):
         - target: The name of the target
         - damage: The amount of damage dealt
         """
-        target_name: str = (
-            target.name if hasattr(target, "name") else str(target)
-        )
+        target_name: str = str(getattr(target, "name", target))
         return {
             "attacker": self.name,
             "target": target_name,

@@ -11,11 +11,11 @@ class TournamentPlatform:
 
     def register_card(self, card: TournamentCard) -> str:
         """Register a card and return its unique tournament ID."""
-        base = card.name.lower().replace(" ", "_")
-        existing = sum(
+        base: str = card.name.lower().replace(" ", "_")
+        existing: int = sum(
             1 for k in self._registry if k.startswith(base)
         )
-        card_id = f"{base}_{existing + 1:03d}"
+        card_id: str = f"{base}_{existing + 1:03d}"
         self._registry[card_id] = card
         return card_id
 
@@ -32,19 +32,24 @@ class TournamentPlatform:
         Raises:
             KeyError: If either card ID is not registered.
         """
-        card1 = self._registry[card1_id]
-        card2 = self._registry[card2_id]
+        card1: TournamentCard = self._registry[card1_id]
+        card2: TournamentCard = self._registry[card2_id]
 
-        score1 = card1.attack_power + card1.defense + card1.calculate_rating()
-        score2 = card2.attack_power + card2.defense + card2.calculate_rating()
+        score1: int = card1.attack_power + \
+            card1.defense + card1.calculate_rating()
+        score2: int = card2.attack_power + \
+            card2.defense + card2.calculate_rating()
 
         if score1 >= score2:
-            winner, loser = card1, card2
-            winner_id, loser_id = card1_id, card2_id
+            winner: TournamentCard = card1
+            loser: TournamentCard = card2
+            winner_id: str = card1_id
+            loser_id: str = card2_id
         else:
-            winner, loser = card2, card1
-            winner_id, loser_id = card2_id, card1_id
-
+            winner: TournamentCard = card2
+            loser: TournamentCard = card1
+            winner_id: str = card2_id
+            loser_id: str = card1_id
         winner.update_wins(1)
         loser.update_losses(1)
 
@@ -66,14 +71,14 @@ class TournamentPlatform:
         - rating: Current rating
         - record: Win-loss record as "W-L"
         """
-        sorted_cards = sorted(
+        sorted_cards: list[tuple[str, TournamentCard]] = sorted(
             self._registry.items(),
             key=lambda item: item[1].calculate_rating(),
             reverse=True,
         )
         board: list[dict[str, str | int]] = []
         for rank, (card_id, card) in enumerate(sorted_cards, start=1):
-            info = card.get_rank_info()
+            info: dict[str, str | int] = card.get_rank_info()
             board.append({
                 "rank": rank,
                 "id": card_id,
@@ -91,8 +96,8 @@ class TournamentPlatform:
         - avg_rating: Average rating across all cards
         - platform_status: Current platform status string
         """
-        total_cards = len(self._registry)
-        matches_played = len(self._matches)
+        total_cards: int = len(self._registry)
+        matches_played: int = len(self._matches)
         avg_rating: int = (
             sum(c.calculate_rating() for c in self._registry.values())
             // total_cards

@@ -3,6 +3,7 @@ import sys
 import importlib
 import urllib.request
 import json
+import re
 from datetime import datetime, timezone
 from typing import Any
 import datetime as _dt
@@ -232,6 +233,75 @@ def plot_average_concurrent(
     plt.close()
 
 
+# ---------- PACKAGE MANAGER COMPARISON ----------
+
+def _parse_requirements_txt(path: str) -> dict[str, str]:
+    """Parse requirements.txt into {package: pinned_version}."""
+    result: dict[str, str] = {}
+    try:
+        with open(path) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                # get only packages versions
+                m = re.match(r"^([A-Za-z0-9_\-]+)==(.+)$", line)
+                if m:
+                    result[m.group(1).lower()] = m.group(2)
+    except FileNotFoundError:
+        pass
+    return result
+
+
+def _parse_pyproject_toml(path: str) -> dict[str, str]:
+    """Parse [tool.poetry.dependencies] from pyproject.toml."""
+    result: dict[str, str] = {}
+    try:
+        with open(path) as f:
+            in_deps = False
+            for line in f:
+                line: str = line.strip()
+                if line == "[tool.poetry.dependencies]":
+                    in_deps = True
+                    continue
+                if in_deps:
+                    if line.startswith("["):
+                        break
+                    m = re.match(r'^([A-Za-z0-9_\-]+)\s*=\s*"(.+)"$', line)
+                    if m and m.group(1).lower() != "python":
+                        result[m.group(1).lower()] = m.group(2)
+    except FileNotFoundError:
+        pass
+    return result
+
+
+def compare_package_managers(base_dir: str = ".") -> None:
+    """Print a comparison of pip vs Poetry"""
+    pip_deps: dict[str, str] = _parse_requirements_txt(
+        os.path.join(base_dir, "requirements.txt")
+    )
+    poetry_deps: dict[str, str] = _parse_pyproject_toml(
+        os.path.join(base_dir, "pyproject.toml")
+    )
+    all_pkgs: list[str] = sorted(set(pip_deps) | set(poetry_deps))
+
+    print("\n--- Package Manager Comparison ---")
+    print(f"  {'Package':<14} {'Installed':<12}"
+          f" {'pip (pinned)':<16} {'Poetry (range)'}")
+    print(f"  {'-'*14} {'-'*12} {'-'*16} {'-'*16}")
+    for pkg in all_pkgs:
+        try:
+            mod = importlib.import_module(pkg)
+            installed: Any | str = getattr(mod, "__version__", "unknown")
+        except ImportError:
+            installed = "NOT INSTALLED"
+        pip_ver: str = pip_deps.get(pkg, "—")
+        poetry_ver: str = poetry_deps.get(pkg, "—")
+        print(
+            f"  {pkg:<14} {installed:<12} {pip_ver:<16} {poetry_ver}"
+        )
+
+
 if __name__ == "__main__":
     venv: str | None = os.environ.get("VIRTUAL_ENV")
 
@@ -252,6 +322,9 @@ if __name__ == "__main__":
             "\033[93m  pip install -r requirements.txt && "
             "py loading.py\033[00m"
         )
+
+    _script_dir: str = os.path.dirname(os.path.abspath(__file__))
+    compare_package_managers(_script_dir)
 
     OUTPUT = "matrix_analysis.png"
 

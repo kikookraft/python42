@@ -1,3 +1,4 @@
+import os
 import sys
 import importlib
 import urllib.request
@@ -5,8 +6,6 @@ import json
 from datetime import datetime, timezone
 from typing import Any
 import datetime as _dt
-
-from pandas import DataFrame
 
 # ========== Dependency check ==========
 
@@ -155,7 +154,7 @@ class Session:
 
         df = pd.DataFrame(rows)
 
-        counts: DataFrame = (
+        counts = (
             df.groupby(["date", "slot"])  # type: ignore[call-overload]
             .size()
             .reset_index(name="count")
@@ -163,7 +162,7 @@ class Session:
 
         # calculate average per slot
         num_days: int = counts["date"].nunique()
-        agg: DataFrame = (
+        agg = (
             counts.groupby("slot")["count"]  # type: ignore[call-overload]
             .sum()
             .reset_index(name="total")
@@ -173,7 +172,7 @@ class Session:
         all_slots = pd.DataFrame(
             {"slot": range(0, 1440, interval_minutes)}
         )
-        agg: DataFrame = (
+        agg = (
             all_slots.merge(  # type: ignore[call-overload]
                 agg[["slot", "avg_count"]], on="slot", how="left"
             ).fillna(0)  # type: ignore[call-overload]
@@ -198,7 +197,7 @@ def plot_average_concurrent(
     sessions: list[Session], output_path: str = "matrix_analysis.png"
 ) -> None:
     """Plot average concurrent sessions and save to file."""
-    df: DataFrame = Session.avg_by_interval(
+    df = Session.avg_by_interval(
         sessions, interval_minutes=1)
 
     fig, ax = plt.subplots(figsize=(14, 5))  # type: ignore[call-overload]
@@ -221,8 +220,7 @@ def plot_average_concurrent(
         "Avg concurrent sessions", fontsize=12
     )
     ax.set_title(  # type: ignore[call-overload]
-        "Average Concurrent Session Count by Time of Day"
-        " (1-min buckets, averaged over all days)",
+        "Average Session Count over a day",
         fontsize=14,
     )
     ax.grid(axis="y", linestyle="--", alpha=0.5)  # type: ignore[call-overload]
@@ -235,6 +233,26 @@ def plot_average_concurrent(
 
 
 if __name__ == "__main__":
+    venv: str | None = os.environ.get("VIRTUAL_ENV")
+
+    if venv:
+        print(f"Running in virtual environment: {venv}")
+    else:
+        print(
+            "WARNING: Not running in a virtual environment. "
+            "It's recommended to use one to manage dependencies.\n"
+        )
+        print(
+            "To create and activate a virtual environment, run:\n"
+            "\033[95m  py -m venv .venv\n"
+            "\033[95m  source .venv/bin/activate.fish\033[00m\n"
+            "then :\n"
+            "\033[93m  poetry install && poetry run python loading.py\033[00m"
+            "\nor\n"
+            "\033[93m  pip install -r requirements.txt && "
+            "py loading.py\033[00m"
+        )
+
     OUTPUT = "matrix_analysis.png"
 
     print("\nAnalyzing Matrix data...")

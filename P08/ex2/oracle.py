@@ -41,6 +41,7 @@ def get_all(data: dict[str, str | None]) -> int:
                         print("Database: "
                               f"{Color.RED}Disconnected{Color.RESET}")
                         good -= 1
+                        continue
                     print(f"Database: {Color.BLUE}Connected{Color.RESET}")
                 case "API_KEY":
                     if not value:

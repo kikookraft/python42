@@ -25,7 +25,7 @@ if __name__ == "__main__":
     import os
     import site
 
-    venv = os.environ.get("VIRTUAL_ENV")
+    venv: str | None = os.environ.get("VIRTUAL_ENV")
 
     if venv is None:
         print_red("MATRIX STATUS: You're still plugged in")
@@ -41,7 +41,7 @@ if __name__ == "__main__":
         print()
         print("Then run this program again.")
     else:
-        venv_name = os.path.basename(venv)
+        venv_name: str = os.path.basename(venv)
         print_green("MATRIX STATUS: Welcome to the construct")
         print("Current Python:", end=" ")
         print_purple(sys.executable)

@@ -2,6 +2,7 @@ import os
 import sys
 import importlib
 import urllib.request
+import urllib.error
 import json
 import re
 from datetime import datetime, timezone
@@ -104,12 +105,19 @@ class Session:
     @classmethod
     def fetch_all(cls, url: str = BASE_URL) -> list["Session"]:
         """Fetch all sessions from URL."""
-        with urllib.request.urlopen(url) as response:
-            data: Any = json.loads(response.read())
-        return [
-            cls(s["host"], s["startTime"], s["endTime"])
-            for s in data["sessions"]
-        ]
+        try:
+            with urllib.request.urlopen(url) as response:
+                data: Any = json.loads(response.read())
+            return [
+                cls(s["host"], s["startTime"], s["endTime"])
+                for s in data["sessions"]
+            ]
+        except urllib.error.URLError as e:
+            print(f"Network error while fetching sessions: {e}")
+            sys.exit(1)
+        except (KeyError, ValueError) as e:
+            print(f"Unexpected response format: {e}")
+            sys.exit(1)
 
     @staticmethod
     def avg_by_interval(

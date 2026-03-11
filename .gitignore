@@ -205,6 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+#exercice specific
 P03/advanced_data_helper.py
 P03/data_generator.py
 P03/exercise_0_help.py
@@ -223,3 +226,4 @@ P09/data_exporter.py
 P09/data_generator.py
 P09/generated_data
 P09/ex1/data_generator.py
+P09/ex2/data_generator.py

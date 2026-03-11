@@ -108,6 +108,7 @@ class AlienContact(BaseModel):
 
 
 def demonstrate() -> None:
+    """Get sample values from the data generator and compute the validation."""
     print("="*40)
     try:
         from data_generator import AlienContactGenerator, DataConfig

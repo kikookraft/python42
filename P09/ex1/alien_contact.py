@@ -18,26 +18,32 @@ class Color:
 
     @staticmethod
     def red(text: str) -> str:
+        """Wrap text in color codes."""
         return f"{Color.RED}{text}{Color.RESET}"
 
     @staticmethod
     def green(text: str) -> str:
+        """Wrap text in color codes."""
         return f"{Color.GREEN}{text}{Color.RESET}"
 
     @staticmethod
     def yellow(text: str) -> str:
+        """Wrap text in color codes."""
         return f"{Color.YELLOW}{text}{Color.RESET}"
 
     @staticmethod
     def blue(text: str) -> str:
+        """Wrap text in color codes."""
         return f"{Color.BLUE}{text}{Color.RESET}"
 
     @staticmethod
     def magenta(text: str) -> str:
+        """Wrap text in color codes."""
         return f"{Color.MAGENTA}{text}{Color.RESET}"
 
     @staticmethod
     def cyan(text: str) -> str:
+        """Wrap text in color codes."""
         return f"{Color.CYAN}{text}{Color.RESET}"
 
 

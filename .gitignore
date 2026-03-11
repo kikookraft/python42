@@ -222,3 +222,4 @@ P08/ex1/poetry.lock
 P09/data_exporter.py
 P09/data_generator.py
 P09/generated_data
+P09/ex1/data_generator.py

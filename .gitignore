@@ -219,3 +219,6 @@ P05/main.py
 P07/card_generator.py
 P08/ex1/poetry.lock
 .vscode/settings.json
+P09/data_exporter.py
+P09/data_generator.py
+P09/generated_data

@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Callable
 
 
 try:
@@ -51,35 +51,39 @@ class Color:
 
 
 def spell_combiner(
-        spell1: callable,
-        spell2: callable) -> callable:
-    def combined_spell(*args, **kwargs) -> tuple:
+        spell1: Callable[..., Any],
+        spell2: Callable[..., Any]) -> Callable[..., Any]:
+    def combined_spell(*args: Any, **kwargs: Any) -> tuple[Any, ...]:
         result1: Any = spell1(*args, **kwargs)
         result2: Any = spell2(*args, **kwargs)
         return (result1, result2)
     return combined_spell
 
 
-def power_amplifier(base_spell: callable, multiplier: int) -> callable:
+def power_amplifier(
+        base_spell: Callable[..., Any],
+        multiplier: int) -> Callable[..., Any]:
     """Amplify the power of a spell."""
-    def amplified_spell(*args, **kwargs) -> Any:
+    def amplified_spell(*args: Any, **kwargs: Any) -> Any:
         result: Any = base_spell(*args, **kwargs)
         return result * multiplier
     return amplified_spell
 
 
-def conditional_caster(condition: callable, spell: callable) -> callable:
+def conditional_caster(
+        condition: Callable[..., Any],
+        spell: Callable[..., Any]) -> Callable[..., Any]:
     """Cast a spell conditionally."""
-    def conditional_spell(*args, **kwargs) -> Any | str:
+    def conditional_spell(*args: Any, **kwargs: Any) -> Any | str:
         if condition(*args, **kwargs):
             return spell(*args, **kwargs)
         return "Spell fizzled"
     return conditional_spell
 
 
-def spell_sequence(spells: list[callable]) -> callable:
+def spell_sequence(spells: list[Callable[..., Any]]) -> Callable[..., Any]:
     """Execute a sequence of spells."""
-    def sequence_spell(*args, **kwargs) -> list[Any]:
+    def sequence_spell(*args: Any, **kwargs: Any) -> list[Any]:
         results: list[Any] = []
         for spell in spells:
             results.append(spell(*args, **kwargs))
@@ -94,9 +98,9 @@ if __name__ == "__main__":
     spell_names: list[str] = fmg.generate_spells(4)
 
     print(Color.cyan("=== Exercise 1 Test Data ==="))
-    print(f"test_values  : {test_values}")
-    print(f"test_targets : {test_targets}")
-    print(f"spell_names  : {spell_names}")
+    print(Color.cyan(f"test_values  : {test_values}"))
+    print(Color.cyan(f"test_targets : {test_targets}"))
+    print(Color.cyan(f"spell_names  : {spell_names}"))
     print()
 
     # Spell factories built from generated data
@@ -115,8 +119,9 @@ if __name__ == "__main__":
     print(Color.yellow("Testing spell combiner..."))
     combined: Any = spell_combiner(fireball, heal)
     for target in test_targets[:2]:
-        result: tuple = combined(target)
-        print(f"  Combined spell result: {result[0]}, {result[1]}")
+        result: tuple[Any, ...] = combined(target)
+        res_str: str = f"  Combined spell result: {result[0]}, {result[1]}"
+        print(Color.green(res_str))
     print()
 
     print(Color.yellow("Testing power amplifier..."))
@@ -125,19 +130,27 @@ if __name__ == "__main__":
     for target in test_targets[:2]:
         original: int = damage(target)
         amplified: int = mega_damage(target)
-        print(f"  [{target}] Original: {original}, Amplified: {amplified}")
+        amp_str: str = f"  [{target}] Original: " + \
+            f"{original}, Amplified: {amplified}"
+        print(Color.green(amp_str))
     print()
 
     print(Color.yellow("Testing conditional caster..."))
     conditional_fireball: Any = conditional_caster(is_enemy, fireball)
     for target in test_targets:
-        print(f"  Against {target}: {conditional_fireball(target)}")
+        cond_str: str = f"  Against {target}: {conditional_fireball(target)}"
+        print(Color.green(cond_str))
     print()
 
     print(Color.yellow("Testing spell sequence..."))
-    spell_funcs: list[callable] = [
-        lambda t, s=name: f"{s.capitalize()} hits {t}" for name in spell_names
+
+    def create_spell_func(s_name: str) -> Callable[[str], str]:
+        return lambda t: f"{s_name.capitalize()} hits {t}"
+
+    spell_funcs: list[Callable[..., Any]] = [
+        create_spell_func(name) for name in spell_names
     ]
     sequence: Any = spell_sequence(spell_funcs)
     for target in test_targets[:2]:
-        print(f"  [{target}] Sequence: {sequence(target)}")
+        seq_str: str = f"  [{target}] Sequence: {sequence(target)}"
+        print(Color.green(seq_str))

@@ -91,7 +91,7 @@ def retry_spell(max_attempts: int) -> Callable[..., Any]:
                     msg: str = "Spell failed, retrying... " \
                         f"(attempt {attempt}/{max_attempts})"
                     print(Color.yellow(msg))
-            fail_msg = f"Spell casting failed after {max_attempts} attempts"
+            fail_msg: str = f"Spell casting failed after {max_attempts} attempts"
             return Color.red(fail_msg)
         return wrapper
     return decorator
@@ -110,7 +110,7 @@ class MageGuild:
     @power_validator(min_power=10)
     def cast_spell(self, spell_name: str, power: int) -> str:
         """Cast a spell with a specific power"""
-        msg = f"Successfully cast {spell_name} with {power} power"
+        msg: str = f"Successfully cast {spell_name} with {power} power"
         return Color.green(msg)
 
 

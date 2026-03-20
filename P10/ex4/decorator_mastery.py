@@ -91,7 +91,8 @@ def retry_spell(max_attempts: int) -> Callable[..., Any]:
                     msg: str = "Spell failed, retrying... " \
                         f"(attempt {attempt}/{max_attempts})"
                     print(Color.yellow(msg))
-            fail_msg: str = f"Spell casting failed after {max_attempts} attempts"
+            fail_msg: str = f"Spell casting failed after" \
+                f"{max_attempts} attempts"
             return Color.red(fail_msg)
         return wrapper
     return decorator

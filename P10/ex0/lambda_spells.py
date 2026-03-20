@@ -4,6 +4,7 @@ try:
 except ImportError:
     print("Error importing FuncMageDataGenerator. "
           "Please ensure data_generator.py is in the same directory.")
+    exit(1)
 
 
 class Color:
